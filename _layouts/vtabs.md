@@ -7,7 +7,7 @@ layout: default
       {% assign sections = site.pages | where: "section",page.section | sort: "weight" %}
       {% for section in sections %}
         <li class="nav-item ml-0">
-          <a class="nav-link border-top rounded-0 {% if section.url == page.url %}active{% endif %}" href="{{ site.baseurl }}{{ section.url }}">{{ section.title }}</a>
+          <a class="nav-link border-top rounded-0 {% if section.url == page.url %}active{% endif %}" href="{{ site.baseUrl }}{{ section.url }}">{{ section.title }}</a>
         </li>
       {% endfor %}
     </ul>
