@@ -43,6 +43,7 @@ const compileStyles = (styles, file) => {
 };
 gulp.task('styles-form', () => compileStyles([
   './node_modules/flatpickr/dist/flatpickr.min.css',
+  './node_modules/bootstrap-treeview/src/css/bootstrap-treeview.css',
   './node_modules/choices.js/assets/styles/css/choices.min.css',
   './node_modules/dialog-polyfill/dialog-polyfill.css',
   './node_modules/@yaireo/tagify/dist/tagify.css',
@@ -50,6 +51,7 @@ gulp.task('styles-form', () => compileStyles([
 ], 'formio.form'));
 gulp.task('styles-builder', () => compileStyles([
   './node_modules/flatpickr/dist/flatpickr.min.css',
+  './node_modules/bootstrap-treeview/src/css/bootstrap-treeview.css',
   './node_modules/choices.js/assets/styles/css/choices.min.css',
   './node_modules/dialog-polyfill/dialog-polyfill.css',
   './node_modules/@yaireo/tagify/dist/tagify.css',
@@ -59,6 +61,7 @@ gulp.task('styles-builder', () => compileStyles([
 ], 'formio.builder'));
 gulp.task('styles-full', ['builder-fonts'], () => compileStyles([
   './node_modules/flatpickr/dist/flatpickr.min.css',
+  './node_modules/bootstrap-treeview/src/css/bootstrap-treeview.css',
   './node_modules/choices.js/assets/styles/css/choices.min.css',
   './node_modules/dialog-polyfill/dialog-polyfill.css',
   './node_modules/@yaireo/tagify/dist/tagify.css',
