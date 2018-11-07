@@ -15,7 +15,7 @@ user input within the workflow.
 ```
 
 ```js
-Formio.createForm(document.getElementById('workflow'), 'https://examples.form.io/multiform');
+Formio.createForm(document.getElementById('workflow'), '{{ site.apiUrl }}/multiform');
 ```
 
 This workflow is a form that uses Form components to bring in multiple forms into a single dynamic workflow. This form
@@ -57,7 +57,7 @@ workflow.form = {
         {
           type: 'form',
           key: 'a',
-          src: 'https://examples.form.io/a',
+          src: '{{ site.apiUrl }}/a',
           reference: true,
           customDefaultValue: 'value = data.score ? {data: {totalScore: data.score}} : {data: {totalScore: 0}};'
         }
@@ -79,7 +79,7 @@ workflow.form = {
         {
           type: 'form',
           key: 'b',
-          src: 'https://examples.form.io/b',
+          src: '{{ site.apiUrl }}/b',
           reference: true,
           customDefaultValue: 'value = data.score ? {data: {totalScore: data.score}} : {data: {totalScore: 0}};'
         }
@@ -101,7 +101,7 @@ workflow.form = {
         {
           type: 'form',
           key: 'c',
-          src: 'https://examples.form.io/c',
+          src: '{{ site.apiUrl }}/c',
           reference: true,
           customDefaultValue: 'value = data.score ? {data: {totalScore: data.score}} : {data: {totalScore: 0}};'
         }
@@ -123,7 +123,7 @@ workflow.form = {
         {
           type: 'form',
           key: 'd',
-          src: 'https://examples.form.io/d',
+          src: '{{ site.apiUrl }}/d',
           reference: true,
           customDefaultValue: 'value = data.score ? {data: {totalScore: data.score}} : {data: {totalScore: 0}};'
         }
@@ -145,7 +145,7 @@ workflow.form = {
         {
           type: 'form',
           key: 'e',
-          src: 'https://examples.form.io/e',
+          src: '{{ site.apiUrl }}/e',
           reference: true,
           customDefaultValue: 'value = data.score ? {data: {totalScore: data.score}} : {data: {totalScore: 0}};'
         }
@@ -216,7 +216,7 @@ workflow.form = {
           {
             type: 'form',
             key: 'a',
-            src: 'https://examples.form.io/a',
+            src: '{{ site.apiUrl }}/a',
             reference: true,
             customDefaultValue: 'value = data.score ? {data: {totalScore: data.score}} : {data: {totalScore: 0}};'
           }
@@ -238,7 +238,7 @@ workflow.form = {
           {
             type: 'form',
             key: 'b',
-            src: 'https://examples.form.io/b',
+            src: '{{ site.apiUrl }}/b',
             reference: true,
             customDefaultValue: 'value = data.score ? {data: {totalScore: data.score}} : {data: {totalScore: 0}};'
           }
@@ -260,7 +260,7 @@ workflow.form = {
           {
             type: 'form',
             key: 'c',
-            src: 'https://examples.form.io/c',
+            src: '{{ site.apiUrl }}/c',
             reference: true,
             customDefaultValue: 'value = data.score ? {data: {totalScore: data.score}} : {data: {totalScore: 0}};'
           }
@@ -282,7 +282,7 @@ workflow.form = {
           {
             type: 'form',
             key: 'd',
-            src: 'https://examples.form.io/d',
+            src: '{{ site.apiUrl }}/d',
             reference: true,
             customDefaultValue: 'value = data.score ? {data: {totalScore: data.score}} : {data: {totalScore: 0}};'
           }
@@ -304,7 +304,7 @@ workflow.form = {
           {
             type: 'form',
             key: 'e',
-            src: 'https://examples.form.io/e',
+            src: '{{ site.apiUrl }}/e',
             reference: true,
             customDefaultValue: 'value = data.score ? {data: {totalScore: data.score}} : {data: {totalScore: 0}};'
           }

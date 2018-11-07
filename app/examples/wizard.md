@@ -48,7 +48,7 @@ You can create a new wizard just like you can a normal form.
 ```
 
 ```js
-Formio.createForm(document.getElementById('wizard'), 'https://examples.form.io/wizard')
+Formio.createForm(document.getElementById('wizard'), '{{ site.apiUrl }}/wizard')
   .then(function(wizard) {
     wizard.on('nextPage', function(page) {
       console.log(page);
@@ -68,7 +68,7 @@ Formio.createForm(document.getElementById('wizard'), 'https://examples.form.io/w
 <div class="card card-body bg-light">
 <div id="wizard"></div>
 <script type="text/javascript">
-Formio.createForm(document.getElementById('wizard'), 'https://examples.form.io/wizard')
+Formio.createForm(document.getElementById('wizard'), '{{ site.apiUrl }}/wizard')
   .then(function(wizard) {
     wizard.on('nextPage', function(page) {
       console.log(page);
@@ -93,7 +93,7 @@ You can also add options when creating a form, the following options are support
 ```js
 Formio.createForm(
   document.getElementById('wizardWithOptions'),
-  'https://examples.form.io/wizard',
+  '{{ site.apiUrl }}/wizard',
   {
     breadcrumbSettings: {clickable:false},
     buttonSettings: {showCancel: false}
@@ -118,7 +118,7 @@ Formio.createForm(
 <script type="text/javascript">
 Formio.createForm(
   document.getElementById('wizardWithOptions'),
-  'https://examples.form.io/wizard',
+  '{{ site.apiUrl }}/wizard',
   {
     breadcrumbSettings: {clickable:false},
     buttonSettings: {showCancel: false}

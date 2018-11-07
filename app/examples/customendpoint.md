@@ -16,7 +16,7 @@ Sometimes you may want to submit the data to your own APIs or naviate to another
 
 ```js
 Formio.icons = 'fontawesome';
-Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/example')
+Formio.createForm(document.getElementById('formio'), '{{ site.apiUrl }}/example')
   .then(function(form) {
     // Prevent the submission from going to the form.io server.
     form.nosubmit = true;
@@ -45,7 +45,7 @@ Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/e
 <div class="card card-body bg-light">
 <div id="formio"></div>
 <script type="text/javascript">
-Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/example')
+Formio.createForm(document.getElementById('formio'), '{{ site.apiUrl }}/example')
   .then(function(form) {
     // Prevent the submission from going to the form.io server.
     form.nosubmit = true;
