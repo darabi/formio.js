@@ -16,12 +16,12 @@ You can load in data from an external API as a result of values entered in a for
 
 ```js
 Formio.icons = 'fontawesome';
-Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/customerload')
+Formio.createForm(document.getElementById('formio'), '{{ site.apiUrl }}/customerload')
   .then(function(form) {
     // Triggered when they click the submit button.
     form.on('change', function(event) {
       if (event.changed && event.changed.component.key === 'customerNumber' && event.changed.value) {
-        fetch('https://examples.form.io/customers/submission?data.number=' + event.changed.value, {
+        fetch('{{ site.apiUrl }}/customers/submission?data.number=' + event.changed.value, {
           headers: {
             'content-type': 'application/json'
           },
@@ -46,12 +46,12 @@ Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/c
 <div class="card card-body bg-light">
 <div id="formio"></div>
 <script type="text/javascript">
-Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/customerload')
+Formio.createForm(document.getElementById('formio'), '{{ site.apiUrl }}/customerload')
   .then(function(form) {
     // Triggered when they click the submit button.
     form.on('change', function(event) {
       if (event.changed && event.changed.component.key === 'customerNumber' && event.changed.value) {
-        fetch('https://examples.form.io/customers/submission?data.number=' + event.changed.value, {
+        fetch('{{ site.apiUrl }}/customers/submission?data.number=' + event.changed.value, {
           headers: {
             'content-type': 'application/json'
           },

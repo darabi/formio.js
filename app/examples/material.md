@@ -12,7 +12,7 @@ You can combine these forms with the amazing [Bootswatch](https://bootswatch.com
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/materia/bootstrap.min.css">
 <link rel="stylesheet" href="https://unpkg.com/formiojs@latest/dist/formio.full.min.css">
 <script src="https://unpkg.com/formiojs@latest/dist/formio.full.min.js"></script>
-<script src="https://unpkg.com/formiojs@latest/dist/formio.embed.js?src=https://examples.form.io/example"></script>
+<script src="https://unpkg.com/formiojs@latest/dist/formio.embed.js?src={{ site.apiUrl }}/example"></script>
 ```
 
-<script src="dist/formio.embed.js?src=https://examples.form.io/example"></script>
+<script src="dist/formio.embed.js?src={{ site.apiUrl }}/example"></script>

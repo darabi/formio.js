@@ -17,7 +17,7 @@ conditional logic that is executed as the person is filling out the form.
 
 ```js
 Formio.icons = 'fontawesome';
-Formio.createForm(document.getElementById('wizard'), 'https://examples.form.io/conditionalwizard');
+Formio.createForm(document.getElementById('wizard'), '{{ site.apiUrl }}/conditionalwizard');
 ```
 
 This wizard will render conditionally based on the data input from the first page.
@@ -27,7 +27,7 @@ This wizard will render conditionally based on the data input from the first pag
 <div class="card card-body bg-light">
   <div id="wizard"></div>
   <script type="text/javascript">
-  Formio.createForm(document.getElementById('wizard'), 'https://examples.form.io/conditionalwizard').then(function(wizard) {
+  Formio.createForm(document.getElementById('wizard'), '{{ site.apiUrl }}/conditionalwizard').then(function(wizard) {
     document.getElementById('showfull').addEventListener('click', function(event) {
       wizard.wizard.full = event.target.checked;
       wizard.setForm(wizard.wizard);

@@ -118,7 +118,7 @@ gulp.task('package-version', function() {
 gulp.task('dist', () => gulp.src(['dist/**/*.*']).pipe(gulp.dest('lib/dist')));
 
 // Watch for changes.
-gulp.task('watch', () => gulp.watch(['./src/**.js', './src/*/**.js'], ['formio.full.js']));
+gulp.task('watch', () => gulp.watch(['./src/**/**.js'], sync.sync(['babel', 'scripts-full'])));
 
 // Create a new build.
 gulp.task('build', sync.sync([['clean'], 'babel', 'package-version', [
