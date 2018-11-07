@@ -307,7 +307,7 @@ Formio.createForm(document.getElementById('lazy-load'), {
       placeholder: 'Select a customer',
       dataSrc: 'url',
       data: {
-        url: 'https://examples.form.io/customer/submission'
+        url: '{{ site.apiUrl }}/customer/submission'
       },
       valueProperty: 'data.email',
       searchField: 'data.email',
@@ -334,7 +334,7 @@ Formio.createForm(document.getElementById('lazy-load'), {
             placeholder: 'Select a customer',
             dataSrc: 'url',
             data: {
-              url: 'https://examples.form.io/customer/submission'
+              url: '{{ site.apiUrl }}/customer/submission'
             },
             valueProperty: 'data.email',
             searchField: 'data.email',
