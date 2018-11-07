@@ -39,6 +39,7 @@ import WellComponent from './well/Well';
 import LocationComponent from './location/Location';
 import FileComponent from './file/File';
 import TabsComponent from './tabs/Tabs';
+import ResourceTreeComponent from './resourcetree/ResourceTree';
 
 export default {
   nested: NestedComponent,
@@ -65,6 +66,7 @@ export default {
   signature: SignatureComponent,
   select: SelectComponent,
   resource: ResourceComponent,
+  resourcetree: ResourceTreeComponent,
   textarea: TextAreaComponent,
   tags: TagsComponent,
   button: ButtonComponent,
