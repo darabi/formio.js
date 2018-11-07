@@ -29,6 +29,7 @@ import PhoneNumberComponent from './phonenumber/PhoneNumber';
 import RadioComponent from './radio/Radio';
 import ReCaptchaComponent from './recaptcha/ReCaptcha';
 import ResourceComponent from './resource/Resource';
+import ResourceTreeComponent from './resourcetree/ResourceTree';
 import SelectComponent from './select/Select';
 import SelectBoxesComponent from './selectboxes/SelectBoxes';
 import SignatureComponent from './signature/Signature';
@@ -76,6 +77,7 @@ export default {
   radio: RadioComponent,
   recaptcha: ReCaptchaComponent,
   resource: ResourceComponent,
+  resourcetree: ResourceTreeComponent,
   select: SelectComponent,
   selectboxes: SelectBoxesComponent,
   signature: SignatureComponent,
