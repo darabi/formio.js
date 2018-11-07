@@ -38,7 +38,7 @@ lib: builder
   <div class="col-sm-10 offset-sm-1 text-center">
     <h3 class="text-center text-muted">which submits to our API Platform</h3>
     <p>hosted or on-premise</p>
-    <a href="https://form.io" target="_blank"><img style="width:100%" src="https://help.form.io/assets/img/formioapi2.png" /></a>
+    <a href="https://form.io" target="_blank"><img style="width:100%" src="/app/assets/images/formioapi2.png" /></a>
   </div>
 </div>
 <div class="row" style="margin-top: 40px;">
@@ -56,7 +56,7 @@ lib: builder
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4"><a href="https://github.com/formio/formio" target="_blank"><img class="img-responsive" src="https://form.io/assets/images/github-logo.png"></a></div>
+      <div class="col-md-4"><a href="https://github.com/formio/formio" target="_blank"><img class="img-responsive" src="/app/assets/images/github-logo.png"></a></div>
       <div class="col-md-8">
         <p>Getting started is as easy as...</p>
         <pre style="background-color: white;">git clone https://github.com/formio/formio.git
@@ -77,11 +77,11 @@ var builder = new Formio.FormBuilder(document.getElementById("builder"), {
   settings: {
     pdf: {
       "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
-      "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0"
+      "src": "http://www.planetpdf.com/planetpdf/pdfs/warnock_camelot.pdf"
     }
   }
 }, {
-  baseUrl: 'https://examples.form.io'
+  baseUrl: '{{ app.apiUrl }}'
 });
 
 var onForm = function(form) {
