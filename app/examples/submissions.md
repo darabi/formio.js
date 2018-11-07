@@ -17,7 +17,7 @@ simply appends a "/submission/[SUBMISSION_ID]" to the end of the Form API like t
 
 ```js
 Formio.icons = 'fontawesome';
-Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/wizard/submission/5a542c9e2a40bf0001e0f8a9', {
+Formio.createForm(document.getElementById('formio'), '{{ site.apiUrl }}/wizard/submission/5a542c9e2a40bf0001e0f8a9', {
   readOnly: true
 });
 ```
@@ -26,7 +26,7 @@ Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/w
 <div class="card card-body bg-light">
 <div id="formio"></div>
 <script type="text/javascript">
-Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/wizard/submission/5a542c9e2a40bf0001e0f8a9', {
+Formio.createForm(document.getElementById('formio'), '{{ site.apiUrl }}/wizard/submission/5a542c9e2a40bf0001e0f8a9', {
   readOnly: true
 });
 </script>

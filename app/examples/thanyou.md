@@ -16,7 +16,7 @@ You can respond to a submission event and change the page of the browser to a th
 
 ```js
 Formio.icons = 'fontawesome';
-Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/example')
+Formio.createForm(document.getElementById('formio'), '{{ site.apiUrl }}/example')
   .then(function(form) {
     // What to do when the submit begins.
     form.on('submitDone', function(submission) {
@@ -29,7 +29,7 @@ Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/e
 <div class="card card-body bg-light">
 <div id="formio"></div>
 <script type="text/javascript">
-Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/example')
+Formio.createForm(document.getElementById('formio'), '{{ site.apiUrl }}/example')
   .then(function(form) {
     // What to do when the submit begins.
     form.on('submitDone', function(submission) {
