@@ -1265,7 +1265,7 @@ export default class Formio {
 Formio.libraries = {};
 Formio.Promise = Promise;
 Formio.Headers = Headers;
-Formio.baseUrl = 'https://api.form.io';
+Formio.baseUrl = 'http://localhost:8080/api';
 Formio.projectUrl = Formio.baseUrl;
 Formio.projectUrlSet = false;
 Formio.plugins = [];
