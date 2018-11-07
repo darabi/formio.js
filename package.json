@@ -61,6 +61,7 @@
   },
   "homepage": "https://github.com/formio/formio.js#readme",
   "dependencies": {
+    "@yaireo/tagify": "^2.15.2",
     "browser-cookies": "^1.2.0",
     "choices.js": "^7.0.0",
     "custom-event-polyfill": "^1.0.7",
@@ -72,6 +73,7 @@
     "fetch-ponyfill": "^6.0.2",
     "flatpickr": "^4.5.7",
     "i18next": "^15.1.1",
+    "jquery": "^3.3.1",
     "json-logic-js": "^1.2.2",
     "jstimezonedetect": "^1.0.6",
     "lodash": "^4.17.11",
