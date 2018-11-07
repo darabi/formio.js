@@ -62,6 +62,7 @@
   "homepage": "https://github.com/formio/formio.js#readme",
   "dependencies": {
     "@yaireo/tagify": "^2.15.2",
+    "bootstrap-treeview": "^1.2.0",
     "browser-cookies": "^1.2.0",
     "choices.js": "^7.0.0",
     "custom-event-polyfill": "^1.0.7",
