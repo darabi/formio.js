@@ -11,7 +11,7 @@ weight: 18
 ```
 
 ```js
-Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/w4', {
+Formio.createForm(document.getElementById('formio'), '{{ site.apiUrl }}/w4', {
   zoom: '-20'
 });
 ```
@@ -19,7 +19,7 @@ Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/w
 <div class="card card-body bg-light">
 <div id="formio"></div>
 <script type="text/javascript">
-Formio.createForm(document.getElementById('formio'), 'https://examples.form.io/w4', {
+Formio.createForm(document.getElementById('formio'), '{{ site.apiUrl }}/w4', {
   zoom: '-20'
 });
 </script>
