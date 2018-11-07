@@ -42,6 +42,7 @@ import FileComponent from './file/File';
 import TabsComponent from './tabs/Tabs';
 import TreeComponent from './tree/Tree';
 import ModalEdit from './modaledit/ModalEdit';
+import ResourceTreeComponent from './resourcetree/ResourceTree';
 
 export default {
   nested: NestedComponent,
@@ -69,6 +70,7 @@ export default {
   signature: SignatureComponent,
   select: SelectComponent,
   resource: ResourceComponent,
+  resourcetree: ResourceTreeComponent,
   textarea: TextAreaComponent,
   tags: TagsComponent,
   button: ButtonComponent,
