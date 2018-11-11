@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import $ from 'jquery';
 import 'bootstrap/js/dist/modal';
 import 'bootstrap-treeview/src/js/bootstrap-treeview';
@@ -57,25 +56,12 @@ export default class ResourceTreeComponent extends TagsComponent {
 
     this.addEventListener(addButton, 'click', (event) => {
       event.preventDefault();
-      // $('#exampleModal').modal('show');
-      // const dialog = this.createModal(this.component.addResourceLabel || 'Add Resource');
-      // const formioForm = this.ce('div');
-      // dialog.body.appendChild(formioForm);
-      // const form = new Webform(formioForm);
-      // form.on('submit', (submission) => {
-      //   this.setValue(submission);
-      //   form.destroy();
-      //   dialog.close();
-      // });
-      // form.src = `${_.get(this.root, 'formio.projectUrl', Formio.getBaseUrl())}/form/${this.component.resource}`;
     });
 
     return addButton;
   }
 
   addInput(input, container) {
-    // Add Resource button
-    // if (this.component.addResource) {
       const table    = this.ce('table', {
         class: 'table table-bordered'
       });
@@ -100,10 +86,6 @@ export default class ResourceTreeComponent extends TagsComponent {
         showCheckbox: true,
         multiSelect: true
       });
-    // }
-    // else {
-    //   super.addInput(input, container);
-    // }
   }
 
   getTree() {
@@ -347,12 +329,11 @@ export default class ResourceTreeComponent extends TagsComponent {
     this.titleAttribute = 'name';
     this.childrenAttribute = 'children';
     this.prepareTreeAttributes(response);
-    console.log('//////////////////////////// response: {}', JSON.stringify(response));
     return response;
   }
 
   prepareTreeAttributes(response) {
-    response.map((val, idx) => {
+    response.map((val) => {
       if (Array.isArray(val)) {
         val.forEach((v) => {
           this.prepareTreeAttributes(v);
