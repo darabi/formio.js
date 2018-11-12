@@ -1,6 +1,8 @@
 import $ from 'jquery';
+window.jQuery = $; window.$ = $;
 import 'bootstrap/js/dist/modal';
-import 'bootstrap-treeview/src/js/bootstrap-treeview';
+import treeview from './bootstrap-treeview';
+$.fn.treeview = treeview;
 import SelectComponent from '../select/Select';
 import TagsComponent from '../tags/Tags';
 
@@ -81,6 +83,10 @@ export default class ResourceTreeComponent extends TagsComponent {
       table.innerHTML = template;
       super.addInput(input, table.querySelector('#tags'));
       super.disabled = true;
+    console.log('Find #tree: {}', $('#tree'));
+    console.log('_jquery: {}', window._jquery);
+    console.log('treeview: {}', treeview);
+    console.log('$: {}', $);
       $('#tree').treeview({
         data: this.getTree(),
         showCheckbox: true,
