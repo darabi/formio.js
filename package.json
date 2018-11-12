@@ -2,7 +2,16 @@
   "name": "formiojs",
   "version": "3.20.17",
   "description": "Common js library for client side interaction with <form.io>",
-  "main": "lib/index.js",
+  "main": "index.js",
+  "files": [
+    "dist",
+    "lib",
+    "utils.js",
+    "wizard.js",
+    "form.js",
+    "embed.js",
+    "full.js"
+  ],
   "pre-commit": [
     "lint"
   ],
@@ -10,7 +19,7 @@
     "build": "esdoc;gulp build",
     "watch": "babel -w ./src/ --out-dir ./lib/",
     "rebuild": "rm -rf node_modules;npm install;gulp build",
-    "tag": "VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]');git add -A; git commit -m \"Build $Version\";git push origin master;git tag v$VERSION;git push origin --tags;",
+    "tag": "VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]');git add -A; git commit -m \"Build $VERSION\";git push origin master;git tag -a -m \"Tagging $VERSION\" v$VERSION;git push origin --tags;",
     "publish": "npm test;gulp build;npm run tag;npm publish lib;",
     "lint": "gulp eslint",
     "serve": "jekyll serve --config _config.yml,_config.dev.yml",
