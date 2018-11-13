@@ -34,13 +34,13 @@ var tv = (function($, window, document, undefined) {
 
     levels: 2,
 
-    expandIcon: 'glyphicon glyphicon-plus',
-    collapseIcon: 'glyphicon glyphicon-minus',
+    expandIcon: 'fa fa-caret-right',
+    collapseIcon: 'fa fa-caret-down',
     emptyIcon: 'glyphicon',
     nodeIcon: '',
     selectedIcon: '',
-    checkedIcon: 'glyphicon glyphicon-check',
-    uncheckedIcon: 'glyphicon glyphicon-unchecked',
+    checkedIcon: 'fa fa-check-square-o',
+    uncheckedIcon: 'fa fa-square-o',
 
     color: undefined, // '#000000',
     backColor: undefined, // '#FFFFFF',
@@ -1206,6 +1206,4 @@ var tv = (function($, window, document, undefined) {
   $.fn[pluginName] = treeview;
 })(jQuery, window, document);
 
-export default function(options, args) {
-  return tv.treeview(options,args);
-}
+export default jQuery.fn.treeview;
