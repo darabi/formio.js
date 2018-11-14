@@ -13,7 +13,7 @@
     "tests"
   ],
   "dependencies": {
-    "choices.js": "^3.0.4",
+    "choices.js": "https://github.com/darabi/Choices.git#v3.0.4-mc1",
     "dialog-polyfill": "^0.4.9",
     "eventemitter2": "^4.1.0",
     "i18next": "^11.3.2",
