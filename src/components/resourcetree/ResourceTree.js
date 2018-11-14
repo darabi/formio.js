@@ -54,10 +54,11 @@ export default class ResourceTreeComponent extends TagsComponent {
   }
 
   /**
-   * Creates a new button to add a resource instance
-   * @returns {HTMLElement} - The "Add Resource" button html element.
+   * Creates a new button to show the tree in a modal dialog, when
+   * inlineTree is false.
+   * @returns {HTMLElement} - The "+" button html element
    */
-  addButton() {
+  addButton(tree) {
     const addButton = this.ce('button', {
       class: 'btn btn-primary'
     });
@@ -65,44 +66,63 @@ export default class ResourceTreeComponent extends TagsComponent {
       class: this.iconClass('plus')
     });
     addButton.appendChild(addIcon);
-    addButton.appendChild(this.text(` ${this.component.addResourceLabel || 'Add Resource'}`));
 
     this.addEventListener(addButton, 'click', (event) => {
       event.preventDefault();
+      tree.hidden = false;
+      const dialog = this.createModal(this.component.selectDialogTitle || 'Select');
+      dialog.body.appendChild(tree);
+      this.addEventListener(dialog, 'close', () => {
+        console.log('Selection dialog closed');
+      });
     });
 
     return addButton;
   }
 
   addInput(input, container) {
-    const table = this.ce('table', {
-      class: 'table table-bordered'
+    const div = this.ce('div', {
+      id: `${this.component.id}-div`,
+      class: 'resource-tree'
     });
     const template = `
-        <div>
-          <tbody>
-            <tr>
-              <td id="tags">
-              </td>
-            </tr>
-            <tr>
-              <div id="tree"></div>
-            </tr>
-          </tbody>
-        </div>`;
-    container.appendChild(table);
-    table.innerHTML = template;
-    super.addInput(input, table.querySelector('#tags'));
+      <div id="${this.component.id}-tags">
+      </div>
+      <div id="${this.component.id}-tree">
+      </div>
+    `;
+    container.appendChild(div);
+    div.innerHTML = template;
+    super.addInput(input, div.querySelector(`#${this.component.id}-tags`));
     // super.disabled = true;
-    var jqinit = $('#tree');
+    this.createTree().then(() => {
+      if (!this.component.inlineTree) {
+        const tree = div.querySelector(`#${this.component.id}-tree`);
+        tree.setAttribute('hidden', true);
+        if (!this.tree) {
+          this.tree = tree.parentNode.removeChild(tree);
+        }
+        const tags = div.querySelector(`#${this.component.id}-tags`);
+        tags.appendChild(this.addButton(this.tree));
+      }
+    });
+  }
+
+  createTree() {
+    var jqinit = $(`#${this.component.id}-tree`);
+    if (!jqinit) {
+      console.warn('Cannot find tree element with id {}-tree on page', this.component.id);
+      return;
+    }
     if (jqinit.treeview === undefined) {
       jqinit.treeview = treeview;
     }
-    this.getTree().then((res, err) => {
+    return this.getTree().then((res, err) => {
       if (err) {
+        // FIXME: correctly report errors
         console.warn('Error retrieving the tree nodes {}', err);
       }
-      $('#tree').treeview({
+      $(`#${this.component.id}-tree`).treeview({
         data: res && (!err) ? res : [],
         showCheckbox: true,
         multiSelect: false,
@@ -118,6 +138,7 @@ export default class ResourceTreeComponent extends TagsComponent {
         this.treeRedrawn = true;
         this.triggerRedraw();
       }
+      return Promise.resolve();
     });
   }
 
@@ -172,183 +193,7 @@ export default class ResourceTreeComponent extends TagsComponent {
       });
     }
     else {
-      const fakeData = {
-        id: '000000000000000000000500',
-        name: 'Kategorien',
-        children: [
-          {
-            id: '000000000000000000000523',
-            name: 'Sport',
-            children: [{
-              id: '000000000000000000000520',
-              name: 'Olympische Spiele'
-            }, {
-              id: '000000000000000000000524',
-              name: 'Leichtathletik'
-            }, {
-              id: '000000000000000000000525',
-              name: 'Ballsport'
-            }, {
-              id: '000000000000000000000526',
-              name: 'Wintersport'
-            }, {
-              id: '000000000000000000000527',
-              name: 'Motorsport'
-            }, {
-              id: '000000000000000000000528',
-              name: 'Wassersport'
-            }, {
-              id: '000000000000000000000529',
-              name: 'Reiten'
-            }, {
-              id: '000000000000000000000530',
-              name: 'Fußball'
-            }, {
-              id: '000000000000000000000531',
-              name: 'Kampfsport'
-            }, {
-              id: '000000000000000000000532',
-              name: 'Radsport'
-            }, {
-              id: '000000000000000000000533',
-              name: 'Turnen'
-            }, {
-              id: '000000000000000000000534',
-              name: 'Fechten'
-            }, {
-              id: '000000000000000000000535',
-              name: 'Extremsport'
-            }, {
-              id: '000000000000000000000536',
-              name: 'Schießen'
-            }, {
-              id: '000000000000000000000537',
-              name: 'Sonstiges'
-            }]
-          },
-          {
-            id: '000000000000000000000538',
-            name: 'Wirtschaft',
-            children: [{
-              id: '000000000000000000000539',
-              name: 'Unternehmen'
-            }, {
-              id: '000000000000000000000540',
-              name: 'Märkte'
-            }, {
-              id: '000000000000000000000541',
-              name: 'Verbraucher'
-            }, {
-              id: '000000000000000000000542',
-              name: 'Service'
-            }, {
-              id: '000000000000000000000543',
-              name: 'Geld und Finanzen'
-            }, {
-              id: '000000000000000000000544',
-              name: 'Mittelstand'
-            }, {
-              id: '000000000000000000000545',
-              name: 'Industrie'
-            }, {
-              id: '000000000000000000000546',
-              name: 'Mobilität'
-            }, {
-              id: '000000000000000000000547',
-              name: 'Auto'
-            }, {
-              id: '000000000000000000000548',
-              name: 'Gesundheit'
-            }, {
-              id: '000000000000000000000549',
-              name: 'Energie'
-            }]
-          }, {
-            id: '000000000000000000000550',
-            name: 'Kultur',
-            children: [{
-              id: '000000000000000000000551',
-              name: 'Musik'
-            }, {
-              id: '000000000000000000000552',
-              name: 'Literatur'
-            }, {
-              id: '000000000000000000000553',
-              name: 'TV'
-            }, {
-              id: '000000000000000000000554',
-              name: 'Kino'
-            }, {
-              id: '000000000000000000000555',
-              name: 'Kunst'
-            }, {
-              id: '000000000000000000000556',
-              name: 'Medien'
-            }]
-          }, {
-            id: '000000000000000000000557',
-            name: 'Wissenschaft',
-            children: [{
-              id: '000000000000000000000558',
-              name: 'Gesundheit und Medizin'
-            }, {
-              id: '000000000000000000000559',
-              name: 'Technik'
-            }, {
-              id: '000000000000000000000560',
-              name: 'Umwelt'
-            }, {
-              id: '000000000000000000000561',
-              name: 'Ernährung'
-            }, {
-              id: '000000000000000000000562',
-              name: 'Forschung'
-            }, {
-              id: '000000000000000000000563',
-              name: 'Bildung'
-            }, {
-              id: '000000000000000000000564',
-              name: 'Klima'
-            }, {
-              id: '000000000000000000000565',
-              name: 'Digitales'
-            }]
-          }, {
-            id: '000000000000000000000566',
-            name: 'Politik',
-            children: [{
-              id: '000000000000000000000567',
-              name: 'Deutschland'
-            }, {
-              id: '000000000000000000000568',
-              name: 'Europa'
-            }, {
-              id: '000000000000000000000569',
-              name: 'Ausland'
-            }]
-          }, {
-            id: '000000000000000000000570',
-            name: 'Lifestyle',
-            children: [{
-              id: '000000000000000000000571',
-              name: 'Reise'
-            }, {
-              id: '000000000000000000000572',
-              name: 'Mode'
-            }, {
-              id: '000000000000000000000573',
-              name: 'Architektur'
-            }, {
-              id: '000000000000000000000574',
-              name: 'Freizeit'
-            }, {
-              id: '000000000000000000000575',
-              name: 'Familie'
-            }]
-          }
-        ]
-      };
-      return Promise.resolve(this.handleTreeResponse(fakeData));
+      return Promise.resolve([]);
     }
   }
 
