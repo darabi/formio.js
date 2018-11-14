@@ -40,6 +40,7 @@ export default class ResourceTreeComponent extends TagsComponent {
       resource: this.component.resource
     };
     this.treeRedrawn = false;
+    this.treeNodeIds = {};
   }
 
   get defaultSchema() {
@@ -47,8 +48,12 @@ export default class ResourceTreeComponent extends TagsComponent {
   }
 
   getValue() {
-    if (this.data[this.component.key]) {
-      return this.data[this.component.key];
+    if (this.choices) {
+      const result = [];
+      this.choices.getValue().map(v => {
+        result.push(v.value);
+      });
+      return result;
     }
     return null;
   }
@@ -93,7 +98,12 @@ export default class ResourceTreeComponent extends TagsComponent {
     `;
     container.appendChild(div);
     div.innerHTML = template;
+    // call super to add the Choices element
     super.addInput(input, div.querySelector(`#${this.component.id}-tags`));
+    // and then add an event listener for removal of choices
+
+    input.addEventListener('removeItem', event => this.onRemoveTag(event), false);
+
     // super.disabled = true;
     this.createTree().then(() => {
       if (!this.component.inlineTree) {
@@ -122,7 +132,7 @@ export default class ResourceTreeComponent extends TagsComponent {
         // FIXME: correctly report errors
         console.warn('Error retrieving the tree nodes {}', err);
       }
-      $(`#${this.component.id}-tree`).treeview({
+      this.treeView = $(`#${this.component.id}-tree`).treeview({
         data: res && (!err) ? res : [],
         showCheckbox: true,
         multiSelect: false,
@@ -143,44 +153,62 @@ export default class ResourceTreeComponent extends TagsComponent {
   }
 
   nodeChecked(node) {
+    const item = node._originalItem;
     const newVal = {
-      value: node,
-      label: _.get(node, this.component.titleAttribute),
-      id: _.get(node, this.component.idAttribute)
+      value: item,
+      label: _.get(item, this.component.titleAttribute),
+      id: _.get(item, this.component.idAttribute),
+      customProperties: node
     };
-    super.setValue([...super.getValue(), newVal]);
-    this.data[this.component.key] = [...this.data[this.component.key], node];
-    this.choices.render();
+
+    // we need this in removeItem callback to deselect nodes
+    this.treeNodeIds[newVal.id] = node.nodeId;
+
+    const currentVal = this.choices.getValue(false);
+    console.log('currentVal is {}', currentVal);
+    if (currentVal.length === 0) {
+      super.setValue(newVal);
+    }
+    else {
+      // we need to distinguish between the removal which follows now and removal by the user
+      this.programmaticallyRemovingItems = true;
+      super.setValue([...currentVal, newVal]);
+      this.programmaticallyRemovingItems = false;
+    }
   }
 
   nodeUnchecked(node) {
-    console.log('Implement nodeUnchecked! {}', node);
+    const item = node._originalItem;
+    let val = null;
+    this.choices.getValue(false).map(v => {
+      if (v.value[this.component.idAttribute] === item[this.component.idAttribute]) {
+        val = v.value;
+      }
+    });
+    if (val) {
+      this.choices.removeItemsByValue(val);
+    }
   }
 
   prepareTreeAttributes(response) {
-    if (!response || !Array.isArray(response)) {
-      return;
+    if (!response) {
+      return [];
     }
-    response.map((val) => {
-      if (Array.isArray(val)) {
-        val.forEach((v) => {
-          this.prepareTreeAttributes(v);
-        });
-      }
-      // FIXME: if objects have a 'text' or 'nodes' attribute, they must be backed up here and restored upon selection
-      if (val.hasOwnProperty('text')) {
-        val._text = val.text;
-      }
-      if (val.hasOwnProperty('nodes')) {
-        val._nodes = val.nodes;
-      }
-      val.text = _.get(val, this.component.titleAttribute);
-      const children = _.get(val, this.component.childrenAttribute);
-      if (children) {
-        this.prepareTreeAttributes(children);
-        val.nodes = children;
-      }
-    });
+    if (Array.isArray(response)) {
+      const result = [];
+      response.forEach((v) => {
+        result.push(this.prepareTreeAttributes(v));
+      });
+      return result;
+    }
+    const newNode = { _originalItem: response };
+    newNode.id = _.get(response, this.component.idAttribute);
+    newNode.text = _.get(response, this.component.titleAttribute);
+    const children = _.get(response, this.component.childrenAttribute);
+    if (children) {
+      newNode.nodes = this.prepareTreeAttributes(children);
+    }
+    return newNode;
   }
 
   getTree() {
@@ -210,8 +238,22 @@ export default class ResourceTreeComponent extends TagsComponent {
     else {
       res = [res];
     }
-    this.prepareTreeAttributes(res);
-    return res;
+    return this.prepareTreeAttributes(res);
+  }
+
+  onRemoveTag(event) {
+    if (this.programmaticallyRemovingItems) {
+      console.log('removeItem called while removing programmatically');
+      return;
+    }
+    if (!(event.detail.value && event.detail.value._id)) {
+      return;
+    }
+    const id = event.detail.value._id;
+    const treeNodeId = this.treeNodeIds[id];
+    if (treeNodeId) {
+      $(`#${this.component.id}-tree`).treeview(true).uncheckNode(treeNodeId, { silent: true });
+    }
   }
 }
 
