@@ -19,8 +19,9 @@ import jQuery from 'jquery';
  * limitations under the License.
  * ========================================================= */
 
-var tv = (function($, window, document, undefined) {
-  /*global jQuery, console*/
+/* eslint-disable max-statements */
+(function($, window, document, undefined) {
+  /* used from the global scope: jQuery, console */
 
   'use strict';
 
@@ -484,6 +485,7 @@ var tv = (function($, window, document, undefined) {
     level += 1;
 
     var _this = this;
+    /* eslint-disable max-statements */
     $.each(nodes, function addNodes(id, node) {
       var treeItem = $(_this.template.item)
         .addClass(`node-${  _this.elementId}`)
