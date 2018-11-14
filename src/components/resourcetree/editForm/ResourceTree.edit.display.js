@@ -49,11 +49,27 @@ export default [
     }
   },
   {
-    weight: 650,
+    weight: 0,
     type: 'checkbox',
     label: 'Show root node',
     tooltip: 'If checked, the retrieved root node is shown in the selection, otherwise only its children are shown.',
     key: 'showRootNode',
+    input: true
+  },
+  {
+    weight: 0,
+    type: 'checkbox',
+    label: 'Inline tree',
+    tooltip: 'If checked, tree is shown in the form itself, otherwise a button opens a modal dialog showing the tree.',
+    key: 'inlineTree',
+    input: true
+  },
+  {
+    weight: 0,
+    type: 'textfield',
+    label: 'Select Dialog Title',
+    tooltip: 'When inlineTree is true, the value of this field is shown as the title of the modal dialog showing the tree.',
+    key: 'selectDialogTitle',
     input: true
   },
   {
