@@ -59,6 +59,15 @@ export default [
   {
     weight: 0,
     type: 'checkbox',
+    label: 'Recursive children selection',
+    defaultValue: true,
+    tooltip: 'If checked, a change of selection recursively toggles the checkboxes in the visible children subtree.',
+    key: 'recursiveSelect',
+    input: true
+  },
+  {
+    weight: 0,
+    type: 'checkbox',
     label: 'Inline tree',
     tooltip: 'If checked, tree is shown in the form itself, otherwise a button opens a modal dialog showing the tree.',
     key: 'inlineTree',
