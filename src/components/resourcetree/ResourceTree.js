@@ -63,26 +63,37 @@ export default class ResourceTreeComponent extends TagsComponent {
    * inlineTree is false.
    * @returns {HTMLElement} - The "+" button html element
    */
-  addButton(tree) {
-    const addButton = this.ce('button', {
+  addButton(treeDiv) {
+    const buttonDiv = this.ce('div', {
+      class: 'resource-tree-button'
+    });
+    const button = this.ce('button', {
       class: 'btn btn-primary'
     });
-    const addIcon = this.ce('i', {
-      class: this.iconClass('plus')
+    buttonDiv.appendChild(button);
+    // TODO: make the icon configurable?
+    const icon = this.ce('i', {
+      class: 'fa fa-pencil-square-o'
     });
-    addButton.appendChild(addIcon);
+    button.appendChild(icon);
 
-    this.addEventListener(addButton, 'click', (event) => {
+    this.addEventListener(button, 'click', (event) => {
       event.preventDefault();
-      tree.hidden = false;
       const dialog = this.createModal(this.component.selectDialogTitle || 'Select');
-      dialog.body.appendChild(tree);
+      if (treeDiv) {
+        if (treeDiv.parentNode) {
+          this.removeChildFrom(treeDiv, treeDiv.parentNode);
+        }
+        treeDiv.hidden = false;
+        dialog.body.appendChild(treeDiv);
+      }
       this.addEventListener(dialog, 'close', () => {
-        console.log('Selection dialog closed');
+        treeDiv.hidden = true;
+        document.body.appendChild(treeDiv);
       });
     });
 
-    return addButton;
+    return buttonDiv;
   }
 
   addInput(input, container) {
@@ -90,66 +101,70 @@ export default class ResourceTreeComponent extends TagsComponent {
       id: `${this.component.id}-div`,
       class: 'resource-tree'
     });
-    const template = `
-      <div id="${this.component.id}-tags">
-      </div>
-      <div id="${this.component.id}-tree">
-      </div>
-    `;
+    const template = `<div id="${this.component.id}-tags"></div>`;
     container.appendChild(div);
     div.innerHTML = template;
     // call super to add the Choices element
     super.addInput(input, div.querySelector(`#${this.component.id}-tags`));
     // and then add an event listener for removal of choices
-
     input.addEventListener('removeItem', event => this.onRemoveTag(event), false);
 
-    // super.disabled = true;
-    this.createTree().then(() => {
-      if (!this.component.inlineTree) {
-        const tree = div.querySelector(`#${this.component.id}-tree`);
-        tree.setAttribute('hidden', true);
-        if (!this.tree) {
-          this.tree = tree.parentNode.removeChild(tree);
+    this.appendTreeTo(div)
+      .then((treeDiv, err) => {
+        if (!this.component.inlineTree) {
+          this.removeChildFrom(treeDiv, div);
+          const tags = div.querySelector(`#${this.component.id}-tags`);
+          tags.appendChild(this.addButton(treeDiv));
         }
-        const tags = div.querySelector(`#${this.component.id}-tags`);
-        tags.appendChild(this.addButton(this.tree));
-      }
-    });
+      });
   }
 
-  createTree() {
-    var jqinit = $(`#${this.component.id}-tree`);
+  async appendTreeTo(element) {
+    const treeDiv = this.ce('div', {
+      id: `${this.component.id}-tree`,
+      class: 'resourcetree-tree'
+    });
+    element.appendChild(treeDiv);
+    return this.createTree(`#${this.component.id}-tree`)
+      .then(
+        () => treeDiv,
+        (err) => {
+          throw (err);
+        });
+  }
+
+  async createTree(elementId) {
+    // a hack to overcome cases where the initialisation of the bootstrap-treeview plugin wasn't successful
+    this.addJqueryTreeview(elementId);
+    const data = await this.getTree();
+    this.treeView = $(elementId).treeview({
+      data: data,
+      showCheckbox: true,
+      multiSelect: false,
+      selectable: false,
+      onNodeChecked: (event, data) => {
+        this.nodeChecked(data);
+      },
+      onNodeUnchecked: (event, data) => {
+        this.nodeUnchecked(data);
+      }
+    });
+    if (!this.treeRedrawn) {
+      this.treeRedrawn = true;
+      this.triggerRedraw();
+    }
+  }
+
+  addJqueryTreeview(elementId) {
+    var jqinit = $(elementId);
     if (!jqinit) {
-      console.warn('Cannot find tree element with id {}-tree on page', this.component.id);
-      return;
+      console.warn('Cannot find tree element with id {} on page', elementId);
+      return false;
     }
     if (jqinit.treeview === undefined) {
       jqinit.treeview = treeview;
     }
-    return this.getTree().then((res, err) => {
-      if (err) {
-        // FIXME: correctly report errors
-        console.warn('Error retrieving the tree nodes {}', err);
-      }
-      this.treeView = $(`#${this.component.id}-tree`).treeview({
-        data: res && (!err) ? res : [],
-        showCheckbox: true,
-        multiSelect: false,
-        selectable: false,
-        onNodeChecked: (event, data) => {
-          this.nodeChecked(data);
-        },
-        onNodeUnchecked: (event, data) => {
-          this.nodeUnchecked(data);
-        }
-      });
-      if (!this.treeRedrawn) {
-        this.treeRedrawn = true;
-        this.triggerRedraw();
-      }
-      return Promise.resolve();
-    });
+    return true;
   }
 
   nodeChecked(node) {
@@ -216,17 +231,22 @@ export default class ResourceTreeComponent extends TagsComponent {
     return newNode;
   }
 
-  getTree() {
+  async getTree() {
+    if (this.treeData) {
+      return this.treeData;
+    }
     if (this.component.url && this.component.url.trim() !== '') {
       return Formio.makeStaticRequest(this.component.url, 'GET').then((res, err) => {
-        if (!res || err) {
-          return [];
+        if (err) {
+          console.warn('Cannot retrieve tree nodes from {}. Error: {}', this.component.url, err);
+          return;
         }
-        return this.handleTreeResponse(res);
+        this.treeData = this.handleTreeResponse(res);
+        return this.treeData;
       });
     }
     else {
-      return Promise.resolve([]);
+      return [];
     }
   }
 

@@ -708,3 +708,35 @@ body.formio-dialog-open {
 .formio-component-dateTime .form-control[type="datetime-local"] ~ .input-group-addon {
   width: auto;
 }
+
+.formio-component-resourcetree {
+  .resource-tree {
+    & > div {
+      display: flex;
+    }
+
+    .choices {
+      flex-grow: 1;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// resourcetree lacks a bit of top margin when shown in a dialog
+.formio-dialog-content {
+  .resourcetree-tree {
+    margin-top: 2em;
+  }
+}
+
+// show the resourcetree choices and button side by side while growing the choices
+.resource-tree {
+  & > div {
+    display: flex;
+  }
+
+  .choices {
+    flex-grow: 1;
+    margin-bottom: 0;
+  }
+}
