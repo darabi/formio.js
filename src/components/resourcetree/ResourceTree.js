@@ -179,35 +179,64 @@ export default class ResourceTreeComponent extends TagsComponent {
     // we need this in removeItem callback to deselect nodes
     this.treeNodeIds[newVal.id] = node.nodeId;
 
-    const currentVal = this.choices.getValue(false);
-    console.log('currentVal is {}', currentVal);
-    if (currentVal.length === 0) {
+    const choiceValues = this.choices.getValue(false);
+    const nodesToRemove = [];
+    const tree = $(`#${this.component.id}-tree`).treeview(true);
+
+    // temporarily set check to false (otherwise uncheckNodesAndMaybeSubtree would be more complicated)
+    node.state.checked = false;
+    // we have to collect the nodes which are already checked (we have to remove them from the choices)
+    this.checkNodeAndMaybeSubtree(node, tree, [], nodesToRemove);
+    node.state.checked = true;
+
+    if (choiceValues.length === 0) {
       super.setValue(newVal);
     }
     else {
       // we need to distinguish between the removal which follows now and removal by the user
       // the latter is handled in onRemoveTag
       this.programmaticallyModifyingNodes = true;
-      super.setValue([...currentVal, newVal]);
+      super.setValue([...this.removeNodesFromChoices(nodesToRemove, choiceValues), newVal]);
       this.programmaticallyModifyingNodes = false;
     }
-    this.checkNodeAndMaybeSubtree(node, $(`#${this.component.id}-tree`).treeview(true), null);
   }
 
   nodeUnchecked(node) {
-    const item = node._originalItem;
-    let val = null;
-    this.choices.getValue(false).map(v => {
-      if (v.value[this.component.idAttribute] === item[this.component.idAttribute]) {
-        val = v.value;
-      }
-    });
-    if (val) {
-      this.programmaticallyModifyingNodes = true;
-      this.choices.removeActiveItemsByValue(val);
-      this.programmaticallyModifyingNodes = false;
+    const choiceValues = this.choices.getValue(false);
+    const nodesToRemove = [node];
+    const tree = $(`#${this.component.id}-tree`).treeview(true);
+
+    // temporarily set check to true (otherwise uncheckNodesAndMaybeSubtree would be more complicated)
+    node.state.checked = true;
+    this.uncheckNodeAndMaybeSubtree(node, tree, nodesToRemove, []);
+    node.state.checked = false;
+
+    this.findNodesInChoices(nodesToRemove, choiceValues)
+      .map(v => {
+        this.programmaticallyModifyingNodes = true;
+        this.choices.removeActiveItemsByValue(v.value);
+        this.programmaticallyModifyingNodes = false;
+      });
+  }
+
+  findNodesInChoices(nodes, choiceValues) {
+    if (!(nodes && Array.isArray(nodes) && choiceValues)) {
+      return [];
     }
-    this.uncheckNodeAndMaybeSubtree(node, $(`#${this.component.id}-tree`).treeview(true));
+    const idAttr = this.component.idAttribute;
+    const ids = nodes.map(n => n._originalItem[idAttr]);
+
+    return choiceValues.filter(v => ids.indexOf(v.value[idAttr]) > -1);
+  }
+
+  removeNodesFromChoices(nodes, choiceValues) {
+    if (!(nodes && Array.isArray(nodes) && choiceValues)) {
+      return [];
+    }
+    const idAttr = this.component.idAttribute;
+    const ids = nodes.map(n => n._originalItem[idAttr]);
+
+    return choiceValues.filter(v => ids.indexOf(v.value[idAttr]) < 0);
   }
 
   prepareTreeAttributes(response) {
@@ -280,13 +309,13 @@ export default class ResourceTreeComponent extends TagsComponent {
       const tree = $(`#${this.component.id}-tree`).treeview(true);
       if (tree) {
         const node = tree.getNode(treeNodeId);
-        this.uncheckNodeAndMaybeSubtree(node, tree);
+        this.uncheckNodeAndMaybeSubtree(node, tree, [], []);
       }
     }
   }
 
-  uncheckNodeAndMaybeSubtree(node, tree) {
-    if (node) {
+  uncheckNodeAndMaybeSubtree(node, tree, modifiedChildren, unmodifiedChildren) {
+    if (node && node.state.checked === true) {
       tree.uncheckNode(node.nodeId, { silent: true });
 
       if (!this.component.recursiveSelect) {
@@ -295,15 +324,20 @@ export default class ResourceTreeComponent extends TagsComponent {
       // if recursiveSelect is true, walk the children
       if (node.nodes) {
         node.nodes.forEach(child => {
-          this.uncheckNodeAndMaybeSubtree(child, tree);
-          this.nodeUnchecked(child);
+          if (child.state.checked === true) {
+            modifiedChildren.push(child);
+            this.uncheckNodeAndMaybeSubtree(child, tree, modifiedChildren, unmodifiedChildren);
+          }
+          else {
+            unmodifiedChildren.push(child);
+          }
         });
       }
     }
   }
 
-  checkNodeAndMaybeSubtree(node, tree, additionalChildFunction) {
-    if (node) {
+  checkNodeAndMaybeSubtree(node, tree, modifiedChildren, unmodifiedChildren) {
+    if (node && node.state.checked === false) {
       tree.checkNode(node.nodeId, { silent: true });
 
       if (!this.component.recursiveSelect) {
@@ -312,9 +346,12 @@ export default class ResourceTreeComponent extends TagsComponent {
       // if recursiveSelect is true, walk the children
       if (node.nodes) {
         node.nodes.forEach(child => {
-          this.checkNodeAndMaybeSubtree(child, tree, additionalChildFunction);
-          if (additionalChildFunction) {
-            additionalChildFunction(child);
+          if (child.state.checked === false) {
+            modifiedChildren.push(child);
+            this.checkNodeAndMaybeSubtree(child, tree, modifiedChildren, unmodifiedChildren);
+          }
+          else {
+            unmodifiedChildren.push(child);
           }
         });
       }
