@@ -80,18 +80,18 @@ export default class ResourceComponent extends SelectComponent {
       });
       const template = '<tbody>' +
                        '<tr>' +
-                         '<td id="select">' +
+                         '<td id="select" class="resource-select">' +
                          '</td>' +
                        '</tr>' +
                        '<tr>' +
-                         '<td id="button" colspan="2">' +
+                         '<td id="button" class="add-resource-button" colspan="2">' +
                          '</td>' +
                        '</tr>' +
                      '</tbody>';
       container.appendChild(table);
       table.innerHTML = template;
-      table.querySelector('#button').appendChild(this.addButton());
-      super.addInput(input, table.querySelector('#select'));
+      table.querySelector('.add-resource-button').appendChild(this.addButton());
+      super.addInput(input, table.querySelector('.resource-select'));
     }
     else {
       super.addInput(input, container);
