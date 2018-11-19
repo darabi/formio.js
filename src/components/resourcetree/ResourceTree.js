@@ -265,9 +265,18 @@ export default class ResourceTreeComponent extends TagsComponent {
       return this.treeData;
     }
     if (this.component.url && this.component.url.trim() !== '') {
-      return Formio.makeStaticRequest(this.component.url, 'GET').then((res, err) => {
+      const compUrl = this.component.url.trim();
+      let finalUrl;
+      const idx = compUrl.indexOf('http');
+      if (idx === 0) {
+        finalUrl = compUrl;
+      }
+      else {
+        finalUrl = `${_.get(this.root, 'formio.projectUrl', Formio.getBaseUrl())}${compUrl}`;
+      }
+      return Formio.makeStaticRequest(finalUrl, 'GET').then((res, err) => {
         if (err) {
-          console.warn('Cannot retrieve tree nodes from {}. Error: {}', this.component.url, err);
+          console.warn('Cannot retrieve tree nodes from {}. Error: {}', finalUrl, err);
           return;
         }
         this.treeData = this.handleTreeResponse(res);
