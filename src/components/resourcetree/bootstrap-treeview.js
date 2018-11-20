@@ -143,6 +143,7 @@ import jQuery from 'jquery';
 
       // Search methods
       search: $.proxy(this.search, this),
+      filterNodes: $.proxy(this.filterNodes, this),
       clearSearch: $.proxy(this.clearSearch, this)
     };
   };
@@ -347,6 +348,11 @@ import jQuery from 'jquery';
       console.log('Error: node does not exist');
     }
     return node;
+  };
+
+  Tree.prototype.filterNodes = function(filterFunction) {
+    /* eslint-disable brace-style */
+    return this.nodes.filter(n => { return filterFunction(n); });
   };
 
   Tree.prototype.toggleExpandedState = function(node, options) {
