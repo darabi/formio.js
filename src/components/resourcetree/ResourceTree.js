@@ -35,6 +35,7 @@ export default class ResourceTreeComponent extends TagsComponent {
 
   constructor(component, options, data) {
     super(component, options, data);
+
     this.component.dataSrc = 'resource';
     this.component.data = {
       resource: this.component.resource
@@ -56,6 +57,20 @@ export default class ResourceTreeComponent extends TagsComponent {
       return result;
     }
     return null;
+  }
+
+  setValue(value) {
+    if (!value || (Array.isArray(value) && value.length === 0)) {
+      super.setValue([]);
+      return;
+    }
+    const tree = $(this.treeView).treeview(true);
+    if (tree && tree.filterNodes) {
+      const ids = value.map(v => _.get(v, this.component.idAttribute));
+      const nodes = tree.filterNodes(n => ids.indexOf(n.id) > -1);
+      // console.log(`ResourceTree.setValue nodes: ${JSON.stringify(nodes)}`);
+      nodes.map(n => this.nodeChecked(n));
+    }
   }
 
   /**
@@ -181,7 +196,7 @@ export default class ResourceTreeComponent extends TagsComponent {
 
     const choiceValues = this.choices.getValue(false);
     const nodesToRemove = [];
-    const tree = $(`#${this.component.id}-tree`).treeview(true);
+    const tree = $(this.treeView).treeview(true);
 
     // temporarily set check to false (otherwise uncheckNodesAndMaybeSubtree would be more complicated)
     node.state.checked = false;
@@ -204,8 +219,15 @@ export default class ResourceTreeComponent extends TagsComponent {
   nodeUnchecked(node) {
     const choiceValues = this.choices.getValue(false);
     const nodesToRemove = [node];
+    const nodesToAdd = [];
     const tree = $(`#${this.component.id}-tree`).treeview(true);
 
+    const parent = tree.getParent(node);
+    if (parent && parent.state.checked) {
+      nodesToRemove.push(parent);
+      tree.getSiblings(node).map(n => nodesToAdd.push(n));
+      // console.log('checked parent node {}, nodesToAdd {}, nodesToRemove {}', parent, nodesToAdd, nodesToRemove);
+    }
     // temporarily set check to true (otherwise uncheckNodesAndMaybeSubtree would be more complicated)
     node.state.checked = true;
     this.uncheckNodeAndMaybeSubtree(node, tree, nodesToRemove, []);
@@ -306,7 +328,6 @@ export default class ResourceTreeComponent extends TagsComponent {
 
   onRemoveTag(event) {
     if (this.programmaticallyModifyingNodes) {
-      console.log('removeItem called while removing programmatically');
       return;
     }
     if (!(event.detail.value && event.detail.value._id)) {
