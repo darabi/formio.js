@@ -62,7 +62,7 @@ export default class ResourceTreeComponent extends TagsComponent {
   setValue(value) {
     if (!value || (Array.isArray(value) && value.length === 0)) {
       super.setValue([]);
-      return;
+      return false;
     }
     const tree = $(this.treeView).treeview(true);
     if (tree && tree.filterNodes) {
@@ -70,7 +70,11 @@ export default class ResourceTreeComponent extends TagsComponent {
       const nodes = tree.filterNodes(n => ids.indexOf(n.id) > -1);
       // console.log(`ResourceTree.setValue nodes: ${JSON.stringify(nodes)}`);
       nodes.map(n => this.nodeChecked(n));
+      if (nodes.length > 0) {
+        return true;
+      }
     }
+    return false;
   }
 
   /**
@@ -183,6 +187,10 @@ export default class ResourceTreeComponent extends TagsComponent {
   }
 
   nodeChecked(node) {
+    // is the node already in the choices?
+    if (!this.choices || this.findNodesInChoices([node], this.choices.getValue(false)).length > 0) {
+      return;
+    }
     const item = node._originalItem;
     const newVal = {
       value: item,
@@ -214,6 +222,7 @@ export default class ResourceTreeComponent extends TagsComponent {
       super.setValue([...this.removeNodesFromChoices(nodesToRemove, choiceValues), newVal]);
       this.programmaticallyModifyingNodes = false;
     }
+    this.updateValue({ noUpdateEvent: true }, this.getValue());
   }
 
   nodeUnchecked(node) {
@@ -239,6 +248,8 @@ export default class ResourceTreeComponent extends TagsComponent {
         this.choices.removeItemsByValue(v.value);
         this.programmaticallyModifyingNodes = false;
       });
+
+    this.updateValue({ noUpdateEvent: true }, this.getValue());
   }
 
   findNodesInChoices(nodes, choiceValues) {
@@ -340,6 +351,7 @@ export default class ResourceTreeComponent extends TagsComponent {
       if (tree) {
         const node = tree.getNode(treeNodeId);
         this.uncheckNodeAndMaybeSubtree(node, tree, [], []);
+        this.updateValue({}, this.getValue());
       }
     }
   }
