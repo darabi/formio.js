@@ -186,9 +186,13 @@ export default class ResourceTreeComponent extends TagsComponent {
     return true;
   }
 
-  nodeChecked(node) {
+  nodeChecked(node, choiceValues = null, fireUpdate=true) {
+    if (!this.choices) return;
+
+    const currentValues = choiceValues ? choiceValues : this.choices.getValue(false);
+
     // is the node already in the choices?
-    if (!this.choices || this.findNodesInChoices([node], this.choices.getValue(false)).length > 0) {
+    if (this.findNodesInChoices([node], currentValues).length > 0) {
       return;
     }
     const item = node._originalItem;
@@ -202,7 +206,6 @@ export default class ResourceTreeComponent extends TagsComponent {
     // we need this in removeItem callback to deselect nodes
     this.treeNodeIds[newVal.id] = node.nodeId;
 
-    const choiceValues = this.choices.getValue(false);
     const nodesToRemove = [];
     const tree = $(this.treeView).treeview(true);
 
@@ -212,17 +215,19 @@ export default class ResourceTreeComponent extends TagsComponent {
     this.checkNodeAndMaybeSubtree(node, tree, [], nodesToRemove);
     node.state.checked = true;
 
-    if (choiceValues.length === 0) {
+    if (currentValues.length === 0) {
       super.setValue(newVal);
     }
     else {
       // we need to distinguish between the removal which follows now and removal by the user
       // the latter is handled in onRemoveTag
       this.programmaticallyModifyingNodes = true;
-      super.setValue([...this.removeNodesFromChoices(nodesToRemove, choiceValues), newVal]);
+      super.setValue([...this.removeNodesFromChoices(nodesToRemove, currentValues), newVal]);
       this.programmaticallyModifyingNodes = false;
     }
-    this.updateValue({ noUpdateEvent: true }, this.getValue());
+    if (fireUpdate) {
+      this.updateValue({ noUpdateEvent: true }, this.getValue());
+    }
   }
 
   nodeUnchecked(node) {
@@ -242,13 +247,13 @@ export default class ResourceTreeComponent extends TagsComponent {
     this.uncheckNodeAndMaybeSubtree(node, tree, nodesToRemove, []);
     node.state.checked = false;
 
-    this.findNodesInChoices(nodesToRemove, choiceValues)
-      .map(v => {
-        this.programmaticallyModifyingNodes = true;
-        this.choices.removeItemsByValue(v.value);
-        this.programmaticallyModifyingNodes = false;
+    this.programmaticallyModifyingNodes = true;
+    this.visitNodesInChoices(nodesToRemove, choiceValues, (treeNode,choiceVal) => {
+        this.choices.removeItemsByValue(choiceVal.value);
+        treeNode.state.checked = false;
       });
-
+    this.programmaticallyModifyingNodes = false;
+    nodesToAdd.map(n => this.nodeChecked(n, null, false));
     this.updateValue({ noUpdateEvent: true }, this.getValue());
   }
 
@@ -260,6 +265,31 @@ export default class ResourceTreeComponent extends TagsComponent {
     const ids = nodes.map(n => n._originalItem[idAttr]);
 
     return choiceValues.filter(v => ids.indexOf(v.value[idAttr]) > -1);
+  }
+
+  /**
+   * Calls func with two arguments: node, choiceValue for each node which is contained
+   * in the choice element of this component.
+   *
+   * @param nodes
+   * @param choiceValues
+   * @param func
+   * @returns {*}
+   */
+  visitNodesInChoices(nodes, choiceValues, func) {
+    if (!(nodes && Array.isArray(nodes) && choiceValues)) {
+      return;
+    }
+    const idAttr = this.component.idAttribute;
+    const nodeMap = {};
+    nodes.map(n => nodeMap[n._originalItem[idAttr]] = n);
+
+    choiceValues.map(v => {
+      const n = nodeMap[v.value[idAttr]];
+      if (n) {
+        func(n,v);
+      }
+    });
   }
 
   removeNodesFromChoices(nodes, choiceValues) {
