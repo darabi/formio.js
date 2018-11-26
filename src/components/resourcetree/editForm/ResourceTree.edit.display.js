@@ -66,6 +66,16 @@ export default [
     input: true
   },
   {
+    type: 'number',
+    input: true,
+    key: 'expandLevel',
+    label: 'Expand tree',
+    defaultValue: 0,
+    weight: 18,
+    description: 'Enter -1 if you want the tree to appear fully expanded, 0 when only the top node(s) should be shown, and increase by one for each additional level to be expanded.',
+    tooltip: 'Use this to have the tree expanded when it is shown.',
+  },
+  {
     weight: 0,
     type: 'checkbox',
     label: 'Inline tree',
