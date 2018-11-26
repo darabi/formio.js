@@ -302,23 +302,35 @@ export default class ResourceTreeComponent extends TagsComponent {
     return choiceValues.filter(v => ids.indexOf(v.value[idAttr]) < 0);
   }
 
-  prepareTreeAttributes(response) {
+  prepareTreeAttributes(response, level) {
     if (!response) {
       return [];
     }
     if (Array.isArray(response)) {
       const result = [];
       response.forEach((v) => {
-        result.push(this.prepareTreeAttributes(v));
+        result.push(this.prepareTreeAttributes(v, level+1));
       });
       return result;
     }
     const newNode = { _originalItem: response };
     newNode.id = _.get(response, this.component.idAttribute);
     newNode.text = _.get(response, this.component.titleAttribute);
+    newNode.selectable = false;
+    if (this.component.expandLevel === -1) {
+      newNode.state = { expanded: true };
+    }
+    else {
+      if (this.component.expandLevel > level) {
+        newNode.state = { expanded: true };
+      }
+      else {
+        newNode.state = { expanded: false };
+      }
+    }
     const children = _.get(response, this.component.childrenAttribute);
     if (children) {
-      newNode.nodes = this.prepareTreeAttributes(children);
+      newNode.nodes = this.prepareTreeAttributes(children, level+1);
     }
     return newNode;
   }
@@ -364,7 +376,8 @@ export default class ResourceTreeComponent extends TagsComponent {
     else {
       res = [res];
     }
-    return this.prepareTreeAttributes(res);
+    // we start with level -1 as res is always an array with the root node(s)
+    return this.prepareTreeAttributes(res, -1);
   }
 
   onRemoveTag(event) {
