@@ -1,24 +1,36 @@
 import $ from 'jquery';
 import _ from 'lodash';
+import Choices from 'choices.js/assets/scripts/dist/choices.js';
 
 window.jQuery = $;
 window.$ = $;
 import 'bootstrap/js/dist/modal';
 import treeview from './bootstrap-treeview';
 import Formio from '../../Formio';
-import SelectComponent from '../select/Select';
-import TagsComponent from '../tags/Tags';
+import BaseComponent from '../base/Base';
 
-export default class ResourceTreeComponent extends TagsComponent {
+export default class ResourceTreeComponent extends BaseComponent {
   static schema(...extend) {
-    return SelectComponent.schema({
+    return BaseComponent.schema({
       type: 'resourcetree',
       label: 'Resource tree',
       key: 'resourcetree',
-      dataSrc: 'resource',
-      resource: '',
-      project: '',
-      template: '<span>{{ item.data }}</span>'
+      dataSrc: '',
+      url: '',
+      idAttribute: '',
+      titleAttribute: '',
+      childrenAttribute: '',
+      showRootNode: true,
+      selectRootNodes: true,
+      hideChoices: false,
+      recursiveSelect: false,
+      expandLevel: 0,
+      inlineTree: false,
+      selectDialogTitle: 'Please select',
+      dialogButtonCss: 'fa fa-pencil-square-o',
+      resource: null,
+      template: '<span>{{ item.data }}</span>',
+      maxSelections: 0
     }, ...extend);
   }
 
@@ -59,9 +71,21 @@ export default class ResourceTreeComponent extends TagsComponent {
     return null;
   }
 
+  setChoiceValue(value) {
+    if (this.choices) {
+      if (value && !_.isArray(value)) {
+        value = [value];
+      }
+      this.choices.removeActiveItems();
+      if (value) {
+        this.choices.setValue(value);
+      }
+    }
+  }
+
   setValue(value) {
     if (!value || (Array.isArray(value) && value.length === 0)) {
-      super.setValue([]);
+      this.setChoiceValue([]);
       return false;
     }
     const tree = $(this.treeView).treeview(true);
@@ -90,9 +114,8 @@ export default class ResourceTreeComponent extends TagsComponent {
       class: 'btn btn-primary'
     });
     buttonDiv.appendChild(button);
-    // TODO: make the icon configurable?
     const icon = this.ce('i', {
-      class: 'fa fa-pencil-square-o'
+      class: this.component.dialogButtonCss
     });
     button.appendChild(icon);
 
@@ -120,22 +143,48 @@ export default class ResourceTreeComponent extends TagsComponent {
       id: `${this.component.id}-div`,
       class: 'resource-tree'
     });
-    const template = `<div id="${this.component.id}-tags"></div>`;
+    const template = `<div id="${this.component.id}-tags"></div><div id="${this.component.id}-button"></div>`;
     container.appendChild(div);
     div.innerHTML = template;
+    const choicesDiv = div.querySelector(`#${this.component.id}-tags`);
     // call super to add the Choices element
-    super.addInput(input, div.querySelector(`#${this.component.id}-tags`));
+    super.addInput(input, choicesDiv);
+    this.choices = new Choices(input, {
+      delimiter: (','),
+      addItems: false,
+      editItems: true,
+      maxItemCount: this.component.maxSelections,
+      removeItemButton: true,
+    });
+    this.choices.itemList.tabIndex = input.tabIndex;
     // and then add an event listener for removal of choices
     input.addEventListener('removeItem', event => this.onRemoveTag(event), false);
-
+    if (this.component.hideChoices) {
+      choicesDiv.hidden = true;
+    }
     this.appendTreeTo(div)
       .then((treeDiv, err) => {
+        if (err) {
+          throw err;
+        }
         if (!this.component.inlineTree) {
           this.removeChildFrom(treeDiv, div);
-          const tags = div.querySelector(`#${this.component.id}-tags`);
+          const tags = div.querySelector(`#${this.component.id}-button`);
           tags.appendChild(this.addButton(treeDiv));
         }
+        if (this.component.selectRootNodes) {
+          const tree = $(this.treeView).treeview(true);
+          const top1 = tree.getNode(0);
+          if (top1) {
+            this.nodeChecked(top1);
+          }
+          const siblings = tree.getSiblings(top1);
+          if (siblings) {
+            siblings.map(n => this.nodeChecked(n));
+          }
+        }
       });
+    return input;
   }
 
   async appendTreeTo(element) {
@@ -144,12 +193,8 @@ export default class ResourceTreeComponent extends TagsComponent {
       class: 'resourcetree-tree'
     });
     element.appendChild(treeDiv);
-    return this.createTree(`#${this.component.id}-tree`)
-      .then(
-        () => treeDiv,
-        (err) => {
-          throw (err);
-        });
+    await this.createTree(`#${this.component.id}-tree`);
+    return treeDiv;
   }
 
   async createTree(elementId) {
@@ -216,17 +261,17 @@ export default class ResourceTreeComponent extends TagsComponent {
     node.state.checked = true;
 
     if (currentValues.length === 0) {
-      super.setValue(newVal);
+      this.setChoiceValue(newVal);
     }
     else {
       // we need to distinguish between the removal which follows now and removal by the user
       // the latter is handled in onRemoveTag
       this.programmaticallyModifyingNodes = true;
-      super.setValue([...this.removeNodesFromChoices(nodesToRemove, currentValues), newVal]);
+      this.setChoiceValue([...this.removeNodesFromChoices(nodesToRemove, currentValues), newVal]);
       this.programmaticallyModifyingNodes = false;
     }
     if (fireUpdate) {
-      this.updateValue({ noUpdateEvent: true }, this.getValue());
+      this.updateValue({ noUpdateEvent: false }, this.getValue());
     }
   }
 
@@ -254,7 +299,7 @@ export default class ResourceTreeComponent extends TagsComponent {
       });
     this.programmaticallyModifyingNodes = false;
     nodesToAdd.map(n => this.nodeChecked(n, null, false));
-    this.updateValue({ noUpdateEvent: true }, this.getValue());
+    this.updateValue({ noUpdateEvent: false }, this.getValue());
   }
 
   findNodesInChoices(nodes, choiceValues) {
@@ -317,15 +362,24 @@ export default class ResourceTreeComponent extends TagsComponent {
     newNode.id = _.get(response, this.component.idAttribute);
     newNode.text = _.get(response, this.component.titleAttribute);
     newNode.selectable = false;
+    newNode.state = {};
     if (this.component.expandLevel === -1) {
-      newNode.state = { expanded: true };
+      newNode.state.expanded = true ;
     }
     else {
       if (this.component.expandLevel > level) {
-        newNode.state = { expanded: true };
+        newNode.state.expanded = true;
       }
       else {
-        newNode.state = { expanded: false };
+        newNode.state.expanded = false;
+      }
+    }
+    if (this.component.checkRootNodes) {
+      if (this.component.recursiveSelect) {
+        newNode.state.checked = true;
+      }
+      else if (level === 0) {
+        newNode.state.checked = true;
       }
     }
     const children = _.get(response, this.component.childrenAttribute);
