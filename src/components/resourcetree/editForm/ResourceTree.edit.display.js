@@ -59,6 +59,24 @@ export default [
   {
     weight: 0,
     type: 'checkbox',
+    label: 'Select root nodes',
+    defaultValue: false,
+    tooltip: 'If checked, the default is a fully checked tree for the case recursiveSelect == true, if !recursiveSelect, only the first level is checked.',
+    key: 'checkRootNodes',
+    input: true
+  },
+  {
+    weight: 0,
+    type: 'checkbox',
+    label: 'Hide choices',
+    defaultValue: false,
+    tooltip: 'If checked, the text field showing the selected choices is hidden and only the tree shows them.',
+    key: 'hideChoices',
+    input: true
+  },
+  {
+    weight: 0,
+    type: 'checkbox',
     label: 'Recursive children selection',
     defaultValue: true,
     tooltip: 'If checked, a change of selection recursively toggles the checkboxes in the visible children subtree.',
@@ -89,6 +107,15 @@ export default [
     label: 'Select Dialog Title',
     tooltip: 'When inlineTree is true, the value of this field is shown as the title of the modal dialog showing the tree.',
     key: 'selectDialogTitle',
+    input: true
+  },
+  {
+    weight: 0,
+    type: 'textfield',
+    label: 'Dialog button CSS class',
+    tooltip: 'When inlineTree is false, the value of this field is used as the CSS class of the button which shows the tree.',
+    key: 'dialogButtonCss',
+    defaultValue: 'fa fa-pencil-square-o',
     input: true
   },
   {
@@ -153,5 +180,15 @@ export default [
     rows: 3,
     weight: 54,
     tooltip: 'The HTML template for the result data items.'
-  }
+  },
+  {
+    weight: 55,
+    type: 'number',
+    input: true,
+    key: 'maxSelections',
+    label: 'Max Selections',
+    defaultValue: 0,
+    tooltip: 'The maximum number of elements that can be selected. 0 for infinity.'
+  },
+
 ];
