@@ -743,13 +743,18 @@ body.formio-dialog-open {
 }
 
 .formio-component-resourcetree {
-  .resource-tree {
-    & > div {
-      display: flex;
+  .resourcetree {
+    display: flex;
+
+    .resourcetree-tags {
+      flex-grow: 1;
+    }
+
+    .resourcetree-button {
+      margin-left: 0.3rem;
     }
 
     .choices {
-      flex-grow: 1;
       margin-bottom: 0;
     }
   }
