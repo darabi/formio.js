@@ -155,6 +155,14 @@ export default class ResourceTreeComponent extends BaseComponent {
       maxItemCount: this.component.maxSelections,
       removeItemButton: true,
     });
+    // prevent user from clicking into the input (so she cannot enter text)
+    if (this.choices.input) {
+      this.choices.input.addEventListener('focus', e => {
+        if (e.target === this.choices.input) {
+          this.choices.input.blur();
+        }
+      });
+    }
     this.choices.itemList.tabIndex = input.tabIndex;
     // and then add an event listener for removal of choices
     input.addEventListener('removeItem', event => this.onRemoveTag(event), false);
