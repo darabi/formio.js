@@ -61,7 +61,7 @@ export default [
     type: 'checkbox',
     label: 'Select root nodes',
     defaultValue: false,
-    tooltip: 'If checked, the default is a fully checked tree for the case recursiveSelect == true, if !recursiveSelect, only the first level is checked.',
+    tooltip: 'If true, the default is a fully checked tree for the case recursiveSelect == true, if !recursiveSelect, only the first level is checked.',
     key: 'checkRootNodes',
     input: true
   },
