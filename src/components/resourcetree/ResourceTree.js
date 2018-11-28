@@ -141,9 +141,13 @@ export default class ResourceTreeComponent extends BaseComponent {
   addInput(input, container) {
     const div = this.ce('div', {
       id: `${this.component.id}-div`,
-      class: 'resource-tree'
+      class: 'resourcetree'
     });
-    const template = `<div id="${this.component.id}-tags"></div><div id="${this.component.id}-button"></div>`;
+    const template = `
+      <div id="${this.component.id}-tags" class="resourcetree-tags">
+      </div>
+      <div id="${this.component.id}-button" class="resourcetree-button">
+      </div>`;
     container.appendChild(div);
     div.innerHTML = template;
     const choicesDiv = div.querySelector(`#${this.component.id}-tags`);
