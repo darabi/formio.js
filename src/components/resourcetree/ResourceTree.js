@@ -21,7 +21,7 @@ export default class ResourceTreeComponent extends BaseComponent {
       titleAttribute: '',
       childrenAttribute: '',
       showRootNode: true,
-      selectRootNodes: true,
+      checkRootNodes: false,
       hideChoices: false,
       recursiveSelect: false,
       expandLevel: 0,
@@ -151,7 +151,6 @@ export default class ResourceTreeComponent extends BaseComponent {
     super.addInput(input, choicesDiv);
     this.choices = new Choices(input, {
       delimiter: (','),
-      addItems: false,
       editItems: true,
       maxItemCount: this.component.maxSelections,
       removeItemButton: true,
@@ -172,7 +171,7 @@ export default class ResourceTreeComponent extends BaseComponent {
           const tags = div.querySelector(`#${this.component.id}-button`);
           tags.appendChild(this.addButton(treeDiv));
         }
-        if (this.component.selectRootNodes) {
+        if (this.component.checkRootNodes) {
           const tree = $(this.treeView).treeview(true);
           const top1 = tree.getNode(0);
           if (top1) {
