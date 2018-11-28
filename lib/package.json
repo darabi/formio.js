@@ -1,6 +1,6 @@
 {
   "name": "formiojs",
-  "version": "3.6.13-mc12",
+  "version": "3.6.13-mc13",
   "description": "Common js library for client side interaction with <form.io>",
   "main": "index.js",
   "repository": {
