@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import _ from 'lodash';
-import Choices from 'choices.js/assets/scripts/dist/choices.js';
+import Choices from 'choices.js/public/assets/scripts/choices.js';
 
 window.jQuery = $;
 window.$ = $;
