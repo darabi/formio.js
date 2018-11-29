@@ -62,6 +62,7 @@ export default class ResourceComponent extends SelectComponent {
       dialog.body.appendChild(formioForm);
       const form = new Webform(formioForm);
       form.on('submit', (submission) => {
+        console.log('------------ this.dataValue', this.dataValue);
         this.setValue(submission);
         form.destroy();
         dialog.close();
