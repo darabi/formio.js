@@ -60,6 +60,16 @@ export default class ResourceTreeComponent extends BaseComponent {
     return ResourceTreeComponent.schema();
   }
 
+  getView(data) {
+    return this.asString(data);
+  }
+
+  asString(value) {
+    return value
+      .map(v => _.default.get(v, this.component.titleAttribute))
+      .join(', ');
+  }
+
   getValue() {
     if (this.choices) {
       const result = [];
