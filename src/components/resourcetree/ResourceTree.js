@@ -66,7 +66,7 @@ export default class ResourceTreeComponent extends BaseComponent {
 
   asString(value) {
     return value
-      .map(v => _.default.get(v, this.component.titleAttribute))
+      .map(v => _.get(v, this.component.titleAttribute))
       .join(', ');
   }
 
