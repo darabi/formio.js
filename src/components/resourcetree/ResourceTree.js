@@ -478,7 +478,7 @@ export default class ResourceTreeComponent extends BaseComponent {
     return this.prepareTreeAttributes(res, -1);
   }
 
-  onRemoveTag(event) {
+  async onRemoveTag(event) {
     if (this.programmaticallyModifyingNodes) {
       return;
     }
@@ -488,11 +488,15 @@ export default class ResourceTreeComponent extends BaseComponent {
     const id = event.detail.value._id;
     const treeNodeId = this.treeNodeIds[id];
     if (treeNodeId !== undefined) {
-      const tree = $(`#${this.component.id}-tree`).treeview(true);
-      if (tree) {
+      const treeView = await this.getTreeView();
+      const tree = $(treeView).treeview(true);
+      if (tree && tree.getNode) {
         const node = tree.getNode(treeNodeId);
         this.uncheckNodeAndMaybeSubtree(node, tree, [], []);
         this.updateValue({}, this.getValue());
+      }
+      else {
+        console.error('ResourceTree.onRemoveTag: bad tree');
       }
     }
   }
