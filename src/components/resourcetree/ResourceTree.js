@@ -93,12 +93,13 @@ export default class ResourceTreeComponent extends BaseComponent {
     }
   }
 
-  setValue(value) {
+  async setValue(value) {
     if (!value || (Array.isArray(value) && value.length === 0)) {
       this.setChoiceValue([]);
       return false;
     }
-    const tree = $(this.treeView).treeview(true);
+    const treeView = await this.getTreeView();
+    const tree = $(treeView).treeview(true);
     if (tree && tree.filterNodes) {
       const ids = value.map(v => _.get(v, this.component.idAttribute));
       const nodes = tree.filterNodes(n => ids.indexOf(n.id) > -1);
@@ -107,6 +108,9 @@ export default class ResourceTreeComponent extends BaseComponent {
       if (nodes.length > 0) {
         return true;
       }
+    }
+    else {
+      console.error('ResourceTree.setValue: bad tree');
     }
     return false;
   }
@@ -408,6 +412,25 @@ export default class ResourceTreeComponent extends BaseComponent {
       newNode.nodes = this.prepareTreeAttributes(children, level+1);
     }
     return newNode;
+  }
+
+  async getTreeView() {
+    if (this.treeView) {
+      return this.treeView;
+    }
+    const getTreeViewLoop = (resolve => {
+      //console.debug('treeView not ready. Retrying in 10ms ...');
+      setTimeout(() => {
+        const val = this.treeView;
+        if (val) {
+          resolve(val);
+        }
+        else {
+          return getTreeViewLoop(resolve);
+        }
+      }, 10);
+    });
+    return await new Promise(getTreeViewLoop);
   }
 
   async getTree() {
