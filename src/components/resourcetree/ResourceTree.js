@@ -174,16 +174,16 @@ export default class ResourceTreeComponent extends BaseComponent {
       removeItemButton: true,
     });
     // prevent user from clicking into the input (so she cannot enter text)
-    if (this.choices.input) {
-      this.choices.input.addEventListener('focus', e => {
-        if (e.target === this.choices.input) {
-          this.choices.input.blur();
+    if (this.choices.input && this.choices.input.element) {
+      this.addEventListener(this.choices.input.element, 'focus', e => {
+        if (e.target === this.choices.input.element) {
+          this.choices.input.element.blur();
         }
       });
     }
     this.choices.itemList.tabIndex = input.tabIndex;
     // and then add an event listener for removal of choices
-    input.addEventListener('removeItem', event => this.onRemoveTag(event), false);
+    this.addEventListener(input, 'removeItem', event => this.onRemoveTag(event), false);
     if (this.component.hideChoices) {
       choicesDiv.hidden = true;
     }
