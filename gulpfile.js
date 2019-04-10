@@ -1,5 +1,6 @@
 'use strict';
 const gulp = require('gulp');
+const gulpsync = require('gulp-sync')(gulp);
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 const babel = require('gulp-babel');
@@ -49,6 +50,7 @@ const compileStyles = (styles, file) => {
     /* eslint-enable quotes */
     .pipe(replace(/\.\.\/fonts\/\/?/g, 'fonts/'))
     .pipe(replace('\\00D7', '×'))
+    .pipe(replace('\\D7', '×'))
     .pipe(gulp.dest('dist'))
     .pipe(rename(`${file}.min.css`))
     .pipe(cleanCSS({ compatibility: 'ie8' }))
@@ -133,7 +135,7 @@ gulp.task('package-version', function() {
 gulp.task('dist', () => gulp.src(['dist/**/*.*']).pipe(gulp.dest('lib/dist')));
 
 // Watch for changes.
-gulp.task('watch', () => gulp.watch(['./src/*.js', './src/**/*.js'], sync.sync(['babel', 'scripts-full'])));
+gulp.task('watch', () => gulp.watch(['./src/*.js', './src/**/*.js'], gulpsync.sync(['babel', 'scripts-full'])));
 
 // Copy over the moment-timezones to the resource folder.
 gulp.task('timezones', () => gulp.src('./node_modules/moment-timezone/data/packed/latest.json').pipe(gulp.dest('./resources')));
