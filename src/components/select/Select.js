@@ -636,7 +636,9 @@ export default class SelectComponent extends BaseComponent {
         threshold: _.get(this, 'component.searchThreshold', 0.3),
       }, _.get(this, 'component.fuseOptions', {})),
       itemComparer: (a, b) => {
-        if ((typeof a == 'object') && (typeof b == 'object')) {
+        if ((typeof a == 'object') &&
+            (typeof b == 'object') &&
+            a._id && b._id) {
           return a._id === b._id;
         }
         else {
