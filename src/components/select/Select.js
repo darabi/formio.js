@@ -513,7 +513,6 @@ export default class SelectComponent extends BaseComponent {
     }
 
     const choicesOptions = {
-      ...customOptions,
       removeItemButton: this.component.disabled ? false : _.get(this.component, 'removeItemButton', true),
       itemSelectText: '',
       classNames: {
@@ -535,7 +534,15 @@ export default class SelectComponent extends BaseComponent {
         include: 'score',
         threshold: 0.3
       },
-      itemComparer: _.isEqual
+      itemComparer: (a, b) => {
+          if ((typeof a == 'object') && (typeof b == 'object')) {
+            return a._id === b._id;
+          }
+          else {
+            return _.isEqual(a,b);
+          }
+      },
+      ...customOptions
     };
 
     const tabIndex = input.tabIndex;
