@@ -174,10 +174,10 @@ export default class ResourceTreeComponent extends BaseComponent {
       removeItemButton: true,
     });
     // prevent user from clicking into the input (so she cannot enter text)
-    if (this.choices.input) {
-      this.addEventListener(this.choices.input, 'focus', e => {
-        if (e.target === this.choices.input) {
-          this.choices.input.blur();
+    if (this.choices.input && this.choices.input.element) {
+      this.addEventListener(this.choices.input.element, 'focus', e => {
+        if (e.target === this.choices.input.element) {
+          this.choices.input.element.blur();
         }
       });
     }
