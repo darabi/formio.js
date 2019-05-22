@@ -2,6 +2,7 @@ import Choices from 'choices.js/public/assets/scripts/choices.js';
 import _ from 'lodash';
 import BaseComponent from '../base/Base';
 import Formio from '../../Formio';
+import Webform from '../../Webform';
 
 export default class SelectComponent extends BaseComponent {
   static schema(...extend) {
@@ -614,6 +615,87 @@ export default class SelectComponent extends BaseComponent {
     }
 
     const searchField = this.component.searchField;
+
+    // The following function gets 'this' from Choices ...
+    var _this = this;
+    const callbackOnUnknownChoice = function(value, hasShift) {
+      var choices = this;
+      const reject = function() {
+        choices.dropdown.isActive = false;
+        choices.showDropdown();
+        choices.input.focus();
+        choices.clearInput();
+        return false;
+      };
+      if (this._store.activeItems.findIndex(x => (x.value.data.text === value)) > -1) {
+        alert(`Tag "${value}" wurde bereits ausgewählt!`);
+        return reject();
+      }
+      var idx = this._store.choices.findIndex(x => (x.value.data.text === value));
+      if (idx > -1) {
+        const item = this._store.choices[idx];
+        console.log(`Tag "${value}" existiert bereits: `,item);
+        this.highlightItem(item);
+        const activeItems = this._store.activeItems;
+        if (activeItems[0]) {
+          activeItems[0].keyCode = 13;
+        }
+        this._handleChoiceAction(this._store.activeItems, null, item.id);
+        return false;
+      }
+      if (!hasShift) {
+        if (!confirm(`Neuer Tag "${value}" ?`)) {
+          return reject();
+        }
+      }
+      const dialog = _this.createModal(_this.component.addResourceLabel || 'Add Resource');
+      const formioForm = _this.ce('div');
+      dialog.body.appendChild(formioForm);
+      const form = new Webform(formioForm);
+      form.on('render', () => {
+        form.submit();
+      });
+      form.on('submit', (submission) => {
+        console.log(`Created new tag "${value}"`);
+        const newTagObj = submission;
+        if (_this.component.multiple) {
+          submission = [..._this.dataValue, submission];
+        }
+        // this conflicts with the other add/set calls below:
+        //console.log('setValue ',submission);
+        //_this.setValue(submission);
+        form.destroy();
+        dialog.close();
+        //
+        const newItem = {
+          label: value,
+          value: newTagObj,
+          keyCode: 13,
+          selected: true,
+          isSelected: true
+        };
+        //console.log('Adding choice ',newItem);
+        this.setChoices([newItem],'value','label',false);
+        // alternative:
+        //console.log('activeItems:',this._store.activeItems);
+        //const oldVal = this.getValue(false);
+        //console.log('oldVal: ',oldVal);
+        //const newVal = [...oldVal,newItem];
+        //console.log('newVal: ',newVal);
+        //this.removeActiveItems();
+        //this.setValue(newVal);
+        //console.log('result: ',this.getValue(false));
+        //console.log('activeItems:',this._store.activeItems);
+        //
+        this.clearInput();
+        // not sure how this relates to the task at hand:
+        //_this.addValueOptions();
+      });
+      form.submission = { data: { text: value } };
+      form.src = `${_.get(this.root, 'formio.projectUrl', Formio.getBaseUrl())}/form/${_this.component.resource}`;
+      return true;
+    };
+
     const choicesOptions = {
       removeItemButton: this.component.disabled ? false : _.get(this.component, 'removeItemButton', true),
       itemSelectText: '',
@@ -647,6 +729,7 @@ export default class SelectComponent extends BaseComponent {
           return _.isEqual(a,b);
         }
       },
+      callbackOnUnknownChoice: callbackOnUnknownChoice,
       ...customOptions,
     };
 
