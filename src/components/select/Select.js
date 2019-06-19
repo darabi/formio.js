@@ -682,9 +682,6 @@ export default class SelectComponent extends BaseComponent {
         if (_this.component.multiple) {
           submission = [..._this.dataValue, submission];
         }
-        // this conflicts with the other add/set calls below:
-        //console.log('setValue ',submission);
-        //_this.setValue(submission);
         form.destroy();
         dialog.close();
         //
@@ -692,25 +689,26 @@ export default class SelectComponent extends BaseComponent {
           label: value,
           value: newTagObj,
           keyCode: 13,
-          selected: true,
-          isSelected: true
+          isSelected: true,
+          active: false
         };
         //console.log('Adding choice ',newItem);
         this.setChoices([newItem],'value','label',false);
-        // alternative:
-        //console.log('activeItems:',this._store.activeItems);
-        //const oldVal = this.getValue(false);
-        //console.log('oldVal: ',oldVal);
-        //const newVal = [...oldVal,newItem];
-        //console.log('newVal: ',newVal);
-        //this.removeActiveItems();
-        //this.setValue(newVal);
-        //console.log('result: ',this.getValue(false));
-        //console.log('activeItems:',this._store.activeItems);
-        //
+        const idx = this._store.choices.findIndex(x => (x.value.data.text === value));
+        if (idx > -1) {
+          const item = this._store.choices[idx];
+          //console.log('Activating item ',item.id);
+          this.highlightItem(item);
+          const activeItems = this._store.activeItems;
+          if (activeItems[0]) {
+            activeItems[0].keyCode = 13;
+          }
+          this._handleChoiceAction(this._store.activeItems, null, item.id);
+        }
+        else {
+          console.warn('added choice not found: ',value);
+        }
         this.clearInput();
-        // not sure how this relates to the task at hand:
-        //_this.addValueOptions();
       });
       form.submission = { data: { text: value } };
       form.src = `${_.get(this.root, 'formio.projectUrl', Formio.getBaseUrl())}/form/${_this.component.resource}`;
