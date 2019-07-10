@@ -17,7 +17,7 @@ Formio.registerComponent = Components.setComponent;
 function getOptions(options) {
   options = _.defaults(options, {
     submitOnEnter: false,
-    icons: Formio.icons || '',
+    icons: Formio.icons || 'fontawesome',
     i18next,
     saveDraft: false,
     saveDraftThrottle: 5000
