@@ -1,0 +1,15 @@
+
+Bump version:
+
+ec package.json 
+
+Build and publish:
+
+./node_modules/.bin/gulp build
+
+# move all untracked files to ./tmp~/ (as it is ignored in .gitignore)
+
+npm run tag
+npm publish lib --registry https://nexus.m-creations.net/repository/npm-hosted/
+
+# move all untracked files back from ./tmp~
