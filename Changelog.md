@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.0.3
+### Fixed
+ - Major performance regressions when form or component were used in custom conditionals or calcuations.
+
+## 4.0.2
+### Fixed
+ - Fixed issue with appearance of unnecessary loading option
+ - Disable load icon item in select component.
+ - Infinite refresh loop by not triggering an update when setting a provided value on Select components.
+ - Issue where the Redraw On option in the form builder was throwing some errors.
+
+### Changed
+ - The refreshOn property to be called "redrawOn", unless it is a Select component. This will maintain reverse compatability for now with and will gracefully deviate in the future.
+
 ## 4.0.1
 ### Fixed
  - Components would incorrectly clear any values that are visible because of another value when loading a submission.
@@ -28,6 +42,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
      - Nested - Handles all nested components.
  - Introducing Templates
    - You can now create your own templates that can override all aspects of the UI/UX for the rendered forms. See https://github.com/formio/formio.js/wiki/Form-Templating
+ - updateValue() - This method now passes the "value" of the component to the first argument, instead of the second. 
+    3.x:  updateValue(flags, value)
+    4.x:  updateValue(value, flags)
 
 ## 3.22.6
 ### Fixed
