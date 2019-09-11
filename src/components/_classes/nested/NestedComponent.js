@@ -466,14 +466,12 @@ export default class NestedComponent extends Field {
   checkData(data, flags, source) {
     flags = flags || {};
     let valid = true;
-    let changed = false;
-
     if (flags.noCheck) {
       return;
     }
 
     // Update the value.
-    this.updateValue(null, {
+    let changed = this.updateValue(null, {
       noUpdateEvent: true
     }, source);
 
