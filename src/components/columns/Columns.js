@@ -110,7 +110,9 @@ export default class ColumnsComponent extends NestedComponent {
       _.last(visible).component.width += span;
 
       _.each(visible, col => {
-        col.element.setAttribute('class', col.className);
+        if (col.element) {
+          col.element.setAttribute('class', col.className);
+        }
       });
     }
   }
