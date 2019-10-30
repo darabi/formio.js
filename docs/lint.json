@@ -920,6 +920,56 @@
     ]
   },
   {
+    "name": "require",
+    "filePath": "src/node_modules/isarray/build/build.js",
+    "lines": [
+      {
+        "lineNumber": 1,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 2,
+        "line": " * Require the given path."
+      },
+      {
+        "lineNumber": 3,
+        "line": " *"
+      },
+      {
+        "lineNumber": 4,
+        "line": " * @param {String} path"
+      },
+      {
+        "lineNumber": 5,
+        "line": " * @return {Object} exports"
+      },
+      {
+        "lineNumber": 6,
+        "line": " * @api public"
+      },
+      {
+        "lineNumber": 7,
+        "line": " */"
+      },
+      {
+        "lineNumber": 8,
+        "line": ""
+      },
+      {
+        "lineNumber": 9,
+        "line": "function require(path, parent, orig) {"
+      }
+    ],
+    "codeParams": [
+      "path",
+      "parent",
+      "orig"
+    ],
+    "docParams": [
+      "path"
+    ]
+  },
+  {
     "name": "checkInvalidDate",
     "filePath": "src/utils/calendarUtils.js",
     "lines": [
