@@ -859,7 +859,12 @@ export default class Component extends Element {
         trigger: 'hover click',
         placement: 'right',
         html: true,
-        title: title
+        title: title,
+        template: `
+          <div class="tooltip" style="opacity: 1;" role="tooltip">
+            <div class="tooltip-arrow"></div>
+            <div class="tooltip-inner"></div>
+          </div>`,
       });
     });
 
@@ -1414,7 +1419,7 @@ export default class Component extends Element {
       switch (action.type) {
         case 'property':
           FormioUtils.setActionProperty(newComponent, action, row, data, newComponent, result, this);
-          if (!_.isEqual(this, newComponent)) {
+          if (!_.isEqual(_.get(this.component, action.property.value), _.get(newComponent, action.property.value))) {
             changed = true;
           }
           break;
@@ -1551,9 +1556,16 @@ export default class Component extends Element {
     // Emit the change.
     this.emit('componentChange', changed);
 
+    // Do not propogate the modified flag.
+    let modified = false;
+    if (flags.modified) {
+      modified = true;
+      delete flags.modified;
+    }
+
     // Bubble this change up to the top.
     if (this.root && !fromRoot) {
-      this.root.triggerChange(flags, changed);
+      this.root.triggerChange(flags, changed, modified);
     }
     return changed;
   }

@@ -4,6 +4,38 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.7.6
+### Fixed
+ - Focus shifting when typing in fields with multiple actions Field Logic
+ - The min validation to not fire if the field is empty. You can use "required" validation for this.
+ - Fixed the currency component to work with viewAsHTML to show the currency symbol.
+ - Fixed tooltips for components inside datagrid.
+ - Fixed problem where nested Containers, Data Grids, and EditGrids were not setting nested data correctly.
+
+## 4.7.5
+### Fixed
+ - Issues where the bootstrap and semantic templates were not compiled to ES5 to work with IE11.
+ 
+### Changed
+ - Upgrade core-js@3.4.1
+
+## 4.7.4
+### Fixed
+ - Ensure that the defaultValue builder field allows for changes to be made to the value without refresh.
+ - Fixing issues where modified flag is propogating and setting other elements to modified.
+ - isBreadcrumbClickable moved to top nav instead of buttons
+
+### Changed
+ - Update @babel/core@7.7.2, core-js@3.4.0
+
+## 4.7.3
+### Fixed
+ - Avoid JS errors when using autoAdjust columns.
+ - Focus shifting when typing in fields with Field Logic
+ 
+### Changed
+ - Upgrade fetch-mock@7.7.3
+
 ## 4.7.2
 ### Fixed
  - Fixing calculateValue and checkConditionals to use correct context variables "row" and "data" for EditGrid and DataGrid.
