@@ -4,8 +4,79 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 4.8.0-rc.3
+## 4.8.0-rc.12
 ### Fixed
+ - Problems where the form builder would not save changes to components.
+ 
+### Changed
+ - Upgrade core-js@3.6.2, i18next@19.0.3, fetch-mock@8.3.1, sinon@8.0.4
+
+## 4.8.0-rc.11
+### Fixed
+ - Radio components with Field Logic rendering as text inputs
+ - Field Logic triggering component JSON change when nothing was changed
+ - Issues with Promises getting included in final build.
+ - Fixing file types to not be part of the submission.
+ 
+### Changed
+ - Upgrade vanilla-picker@2.10.1, sinon@8.0.2, webpack@4.41.5, fetch-mock@8.3.0
+
+## 4.8.0-rc.10
+### Fixed
+ - Removed async and await so that Babel would not add code that fails noeval configurations.
+ - Validation bug with modal
+
+## 4.8.0-rc.9
+### Changed
+ - Made new error list system enabled by default.
+
+## 4.8.0-rc.8
+### Changed
+ - The path to the error styles to use form settings.
+
+## 4.8.0-rc.7
+### Added
+ - TinyMCE wysiwyg editor support.
+ - Implemented errors list navigation
+ 
+### Fixed
+ - Refactored TextArea components to allow multiple Wysiwyg instances.
+ - Fix github #1953: Override .defaultValue of subcomponents.
+ - Problem where multiple number components would not let you add new values. 
+ 
+### Changed
+ - Upgrade eventemitter2@6.0.0, sinon@8.0.1
+
+## 4.8.0-rc.6
+### Fixed
+ - Changed references to Promise and replace them with NativePromise.
+ - Removed component validity checks on non-input nested components.
+
+### Changed
+ - Upgraded @babel/cli@7.7.7, @babel/core@7.7.7, @babel/preset-env@7.7.7, @babel/register@7.7.7, webpack@4.41.4, core-js@3.6.0, eslint@6.8.0
+
+## 4.8.0-rc.5
+### Fixed
+ - Issues with libraries including formiojs getting warnings with Error: Can't resolve 'vm'
+
+## 4.8.0-rc.4
+### Added
+ - A new setting called Modal Edit which allows you to edit any component within a modal.
+ 
+### Fixed
+ - Fixed issue with Number component where empty value for reset was not working.
+
+## 4.8.0-rc.3
+### Changed
+ - Upgrade flatpickr@4.6.3, webpack@4.41.3, fetch-mock@8.1.0, marked@0.8.0
+
+### Fixed
+ - Fixed problem where HTML refreshOnChange was not re-evaluating the whole template and setting it correctly.
+ - Fixed issue where require decimal on Number components was adding 20 decimals to the number.
+ - Fixed single value normalization for Select components.
+ - Fix nested components failing to save because child components are required
+ - Fix issue where textarea saving as json in select component won't allow array values.
+ - Fixed issue where textarea contents would not show in readonly mode.
  - Fix spelling of addMessages.
  - Fix invalid identity escape in numberPattern.
  - Fixed Wizard navigation redraw.

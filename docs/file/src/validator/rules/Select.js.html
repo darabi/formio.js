@@ -44,6 +44,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-component">components/_classes/component</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Component">Component</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-component-editform">components/_classes/component/editForm</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EditFormUtils">EditFormUtils</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-componentmodal">components/_classes/componentModal</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/components/_classes/componentModal/ComponentModal.js~ComponentModal.html">ComponentModal</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-field">components/_classes/field</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/components/_classes/field/Field.js~Field.html">Field</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-input">components/_classes/input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/components/_classes/input/Input.js~Input.html">Input</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-multivalue">components/_classes/multivalue</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/components/_classes/multivalue/Multivalue.js~Multivalue.html">Multivalue</a></span></span></li>
@@ -230,6 +231,11 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/validator/rules/Select.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { interpolate } from &apos;../../utils/utils&apos;;
+import NativePromise from &apos;native-promise-only&apos;;
+import fetchPonyfill from &apos;fetch-ponyfill&apos;;
+const { fetch, Headers, Request } = fetchPonyfill({
+  Promise: NativePromise
+});
 import _ from &apos;lodash&apos;;
 
 const Rule = require(&apos;./Rule&apos;);
@@ -316,20 +322,17 @@ module.exports = class Select extends Rule {
       requestOptions.headers[&apos;x-jwt-token&apos;] = this.config.token;
     }
 
-    // Isomorphic fetch
-    const isofetch = (window &amp;&amp; window.fetch) ? { fetch, Headers, Request, Response } : require(&apos;fetch-ponyfill&apos;)();
-
-    const request = new isofetch.Request(requestOptions.url, {
-      headers: new isofetch.Headers(requestOptions.headers)
-    });
-
-    return isofetch.fetch(request)
-      .then(async response =&gt; {
+    return fetch(new Request(requestOptions.url, {
+      headers: new Headers(requestOptions.headers)
+    }))
+      .then(response =&gt; {
         if (!response.ok) {
           return false;
         }
 
-        const results = await response.json();
+        return response.json();
+      })
+      .then((results) =&gt; {
         return results &amp;&amp; results.length;
       })
       .catch(() =&gt; false);

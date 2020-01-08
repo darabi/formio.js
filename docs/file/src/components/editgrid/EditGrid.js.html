@@ -44,6 +44,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-component">components/_classes/component</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Component">Component</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-component-editform">components/_classes/component/editForm</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EditFormUtils">EditFormUtils</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-componentmodal">components/_classes/componentModal</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/components/_classes/componentModal/ComponentModal.js~ComponentModal.html">ComponentModal</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-field">components/_classes/field</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/components/_classes/field/Field.js~Field.html">Field</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-input">components/_classes/input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/components/_classes/input/Input.js~Input.html">Input</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components--classes-multivalue">components/_classes/multivalue</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/components/_classes/multivalue/Multivalue.js~Multivalue.html">Multivalue</a></span></span></li>
@@ -601,8 +602,10 @@ export default class EditGridComponent extends NestedComponent {
     dialog.refs.dialogContents.appendChild( this.ce(&apos;button&apos;, {
       class: &apos;btn btn-primary&apos;,
       onClick: () =&gt; {
-        dialog.close();
-        this.saveRow(rowIndex);
+        if (this.validateRow(this.editRows[rowIndex], true)) {
+          dialog.close();
+          this.saveRow(rowIndex);
+        }
       }
     }, this.component.saveRow || &apos;Save&apos;));
     this.attachComponents(formComponents, this.editRows[rowIndex].components);
@@ -922,7 +925,12 @@ export default class EditGridComponent extends NestedComponent {
   }
 
   restoreRowContext(editRow) {
-    editRow.components.forEach((component) =&gt; component.data = editRow.data);
+    editRow.components.forEach((component) =&gt; {
+      component.data = editRow.data;
+      if (_.has(editRow.data, component.key)) {
+        component.setValue(editRow.data[component.key]);
+      }
+    });
   }
 }
 
