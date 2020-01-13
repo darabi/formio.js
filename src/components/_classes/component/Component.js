@@ -10,9 +10,11 @@ import Validator from '../../../validator/Validator';
 import Templates from '../../../templates/Templates';
 import { fastCloneDeep, boolValue } from '../../../utils/utils';
 import Element from '../../../Element';
+import ComponentModal from '../componentModal/ComponentModal';
 const CKEDITOR = 'https://cdn.form.io/ckeditor/12.2.0/ckeditor.js';
 const QUILL_URL = 'https://cdn.form.io/quill/1.3.6';
 const ACE_URL = 'https://cdn.form.io/ace/1.4.5/ace.js';
+const TINYMCE_URL = 'https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js';
 
 /**
  * This is the Component class
@@ -100,6 +102,11 @@ export default class Component extends Element {
        * If this component should be included as a column within a submission table.
        */
       tableView: false,
+
+      /**
+       * If this component should be rendering in modal.
+       */
+      modalEdit: false,
 
       /**
        * The input label provided to this component.
@@ -202,9 +209,6 @@ export default class Component extends Element {
       attachMode: 'full'
     }, options || {}));
 
-    // Save off the original component.
-    this.originalComponent = fastCloneDeep(component);
-
     /**
      * Determines if this component has a condition assigned to it.
      * @type {null}
@@ -227,6 +231,15 @@ export default class Component extends Element {
     }
 
     /**
+     * The Form.io component JSON schema.
+     * @type {*}
+     */
+    this.component = _.defaultsDeep(component || {} , this.defaultSchema);
+
+    // Save off the original component to be used in logic.
+    this.originalComponent = fastCloneDeep(this.component);
+
+    /**
      * If the component has been attached
      */
     this.attached = false;
@@ -241,12 +254,6 @@ export default class Component extends Element {
      * @type {*}
      */
     this.data = data || {};
-
-    /**
-     * The Form.io component JSON schema.
-     * @type {*}
-     */
-    this.component = _.defaultsDeep(component || {} , this.defaultSchema);
 
     // Add the id to the component.
     this.component.id = this.id;
@@ -840,6 +847,20 @@ export default class Component extends Element {
     }
   }
 
+  setOpenModalElement() {
+    const template = `
+      <label class="control-label">${this.component.label}</label><br>
+      <button lang='en' class='btn btn-light btn-md open-modal-button' ref='openModal'>Click to set value</button>
+    `;
+    this.componentModal.setOpenModalElement(template);
+  }
+
+  getModalPreviewTemplate() {
+    return `
+      <label class="control-label">${this.component.label}</label><br>
+      <button lang='en' class='btn btn-light btn-md open-modal-button' ref='openModal'>${this.getValueAsString(this.dataValue)}</button>`;
+  }
+
   build(element) {
     element = element || this.element;
     this.empty(element);
@@ -850,16 +871,33 @@ export default class Component extends Element {
   render(children = `Unknown component: ${this.component.type}`, topLevel = false) {
     const isVisible = this.visible;
     this.rendered = true;
-    return this.renderTemplate('component', {
-      visible: isVisible,
-      id: this.id,
-      classes: this.className,
-      styles: this.customStyle,
-      children
-    }, topLevel);
+
+    if (!this.builderMode && this.component.modalEdit) {
+      return ComponentModal.render(this, {
+        visible: isVisible,
+        id: this.id,
+        classes: this.className,
+        styles: this.customStyle,
+        children
+      }, topLevel);
+    }
+    else {
+      return this.renderTemplate('component', {
+        visible: isVisible,
+        id: this.id,
+        classes: this.className,
+        styles: this.customStyle,
+        children
+      }, topLevel);
+    }
   }
 
   attach(element) {
+    if (!this.builderMode && this.component.modalEdit) {
+      this.componentModal = new ComponentModal(this, element);
+      this.setOpenModalElement();
+    }
+
     this.attached = true;
     this.element = element;
     element.component = this;
@@ -1769,6 +1807,21 @@ export default class Component extends Element {
       });
   }
 
+  addTiny(element, settings, onChange) {
+    return Formio.requireLibrary('tinymce', 'tinymce', TINYMCE_URL.replace('no-api-key', settings.tinyApiKey), true)
+      .then((editor) => {
+        return editor.init({
+          ...settings,
+          target: element,
+          theme: 'silver',
+          // eslint-disable-next-line camelcase
+          init_instance_callback: (editor) => {
+            editor.on('Change', () => onChange(editor.getContent()));
+          },
+        });
+      });
+  }
+
   /**
    * The empty value for this component.
    *
@@ -1942,6 +1995,9 @@ export default class Component extends Element {
    */
   setValue(value, flags) {
     const changed = this.updateValue(value, flags);
+    if (this.componentModal && flags && flags.fromSubmission) {
+      this.componentModal.setValue(value);
+    }
     value = this.dataValue;
     if (!this.hasInput) {
       return changed;
@@ -2028,7 +2084,7 @@ export default class Component extends Element {
    */
   updateComponentValue(value, flags) {
     flags = flags || {};
-    let newValue = (value === undefined || value === null) ? this.getValue() : value;
+    let newValue = (!flags.resetValue && (value === undefined || value === null)) ? this.getValue() : value;
     newValue = this.normalizeValue(newValue, flags);
     const changed = (newValue !== undefined) ? this.hasChanged(newValue, this.dataValue) : false;
     if (changed) {
@@ -2061,7 +2117,11 @@ export default class Component extends Element {
    * Resets the value of this component.
    */
   resetValue() {
-    this.setValue(this.emptyValue, { noUpdateEvent: true, noValidate: true });
+    this.setValue(this.emptyValue, {
+      noUpdateEvent: true,
+      noValidate: true,
+      resetValue: true
+    });
     _.unset(this.data, this.key);
   }
 
@@ -2288,8 +2348,10 @@ export default class Component extends Element {
     }
     this.calculateComponentValue(data, flags, row);
     this.checkComponentConditions(data, flags, row);
-    const shouldCheckValidity = !this.builderMode && !this.options.preview && this.defaultValue;
-    if (shouldCheckValidity && !flags.noValidate) {
+
+    // We need to perform a test to see if they provided a default value that is not valid and immediately show
+    // an error if that is the case.
+    if (!this.builderMode && !this.options.preview && !this.isEmpty(this.defaultValue) && !flags.noValidate) {
       return this.checkComponentValidity(data, true, row);
     }
     return flags.noValidate ? true : this.checkComponentValidity(data, false, row);
