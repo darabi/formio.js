@@ -243,6 +243,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import assert from &apos;power-assert&apos;;
 import { expect } from &apos;chai&apos;;
 import sinon from &apos;sinon&apos;;
+import _ from &apos;lodash&apos;;
 import each from &apos;lodash/each&apos;;
 import Harness from &apos;../test/harness&apos;;
 import FormTests from &apos;../test/forms&apos;;
@@ -977,6 +978,35 @@ describe(&apos;Webform tests&apos;, () =&gt; {
           assert.equal(count, 1);
           done();
         }, 500);
+      });
+    });
+  });
+
+  describe(&apos;ReadOnly Form&apos;, () =&gt; {
+    it(&apos;Should apply conditionals when in readOnly mode.&apos;, (done) =&gt; {
+      done = _.once(done);
+      const Conditions = require(&apos;../test/forms/conditions&apos;).default;
+      const formElement = document.createElement(&apos;div&apos;);
+      const form = new Webform(formElement, {
+        readOnly: true,
+        language: &apos;en&apos;,
+        template: &apos;bootstrap3&apos;
+      });
+      form.setForm(Conditions.form).then(() =&gt; {
+        Harness.testConditionals(form, {
+          data: {
+            typeShow: &apos;Show&apos;,
+            typeMe: &apos;Me&apos;,
+            typeThe: &apos;The&apos;,
+            typeMonkey: &apos;Monkey!&apos;
+          }
+        }, [], (error) =&gt; {
+          form.destroy();
+          if (error) {
+            throw new Error(error);
+          }
+          done();
+        });
       });
     });
   });
