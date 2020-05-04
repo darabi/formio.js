@@ -339,6 +339,15 @@ export default class SelectComponent extends Field {
 
     // Say we are done loading the items.
     this.itemsLoadedResolve();
+
+    // Emit an event suitable for triggering custom logic
+    const eventName = this.component.optionsChangedEvent;
+    if (eventName) {
+      this.emit(eventName, {
+        component: this.component,
+        items: items
+      });
+    }
   }
   /* eslint-enable max-statements */
 
