@@ -306,14 +306,12 @@ export default class PDF extends Webform {
   }
 
   rebuild() {
-    if (this.builderMode) {
+    if (this.builderMode &amp;&amp; this.component.components) {
       this.destroyComponents();
       this.addComponents();
       return NativePromise.resolve();
     }
-    else {
-      this.postMessage({ name: &apos;redraw&apos; });
-    }
+    this.postMessage({ name: &apos;redraw&apos; });
     return super.rebuild();
   }
 
@@ -360,12 +358,6 @@ export default class PDF extends Webform {
         this.refs.button.classList.toggle(&apos;hidden&apos;, !submitButton.visible);
       }
 
-      // Submit the form if they click the submit button.
-      this.addEventListener(this.refs.button, &apos;click&apos;, () =&gt; {
-        this.postMessage({ name: &apos;getErrors&apos; });
-        return this.submit();
-      });
-
       this.addEventListener(this.refs.zoomIn, &apos;click&apos;, (event) =&gt; {
         event.preventDefault();
         this.postMessage({ name: &apos;zoomIn&apos; });
@@ -407,6 +399,7 @@ export default class PDF extends Webform {
    * @return {*}
    */
   submitForm(options = {}) {
+    this.postMessage({ name: &apos;getErrors&apos; });
     return this.getSubmission().then(() =&gt; super.submitForm(options));
   }
 
@@ -438,6 +431,10 @@ export default class PDF extends Webform {
   }
 
   setForm(form) {
+    if (this.builderMode &amp;&amp; this.form.components) {
+      this.postMessage({ name: &apos;form&apos;, data: this.form });
+      return NativePromise.resolve();
+    }
     return super.setForm(form).then(() =&gt; {
       if (this.formio) {
         form.projectUrl = this.formio.projectUrl;
@@ -510,20 +507,36 @@ export default class PDF extends Webform {
     });
   }
 
+  focusOnComponent(key) {
+    this.postMessage({
+      name: &apos;focusErroredField&apos;,
+      data: key,
+    });
+  }
+
   // Do not clear the iframe.
   clear() {}
 
   showErrors(error, triggerEvent) {
-    const p = this.ce(&apos;p&apos;);
-    p.classList.add(&apos;help-block&apos;);
-    this.setContent(p, this.t(&apos;submitError&apos;));
-    p.addEventListener(&apos;click&apos;, () =&gt; {
-      window.scrollTo(0, 0);
-    });
-    const div = this.ce(&apos;div&apos;);
-    div.classList.add(&apos;has-error&apos;);
-    this.appendTo(p, div);
-    this.appendTo(div, this.element);
+    const helpBlock = document.getElementById(&apos;submit-error&apos;);
+
+    if (!helpBlock) {
+      const p = this.ce(&apos;p&apos;, { class: &apos;help-block&apos; });
+
+      this.setContent(p, this.t(&apos;submitError&apos;));
+      p.addEventListener(&apos;click&apos;, () =&gt; {
+        window.scrollTo(0, 0);
+      });
+
+      const div = this.ce(&apos;div&apos;, { id: &apos;submit-error&apos;, class: &apos;has-error&apos; });
+
+      this.appendTo(p, div);
+      this.appendTo(div, this.element);
+    }
+
+    if (!this.errors.length &amp;&amp; helpBlock) {
+      helpBlock.remove();
+    }
 
     if (this.errors.length) {
       this.focusOnComponent(this.errors[0].component.key);

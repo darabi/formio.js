@@ -2448,6 +2448,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/pdf.js~pdf#focusoncomponent",
+    "class/src/PDF.js~PDF.html#instance-method-focusOnComponent",
+    "src/PDF.js~PDF#focusOnComponent",
+    "method"
+  ],
+  [
     "src/pdf.js~pdf#getsrc",
     "class/src/PDF.js~PDF.html#instance-method-getSrc",
     "src/PDF.js~PDF#getSrc",
@@ -2667,12 +2673,6 @@ window.esdocSearchIndex = [
     "src/pdfbuilder.js~pdfbuilder#render",
     "class/src/PDFBuilder.js~PDFBuilder.html#instance-method-render",
     "src/PDFBuilder.js~PDFBuilder#render",
-    "method"
-  ],
-  [
-    "src/pdfbuilder.js~pdfbuilder#setform",
-    "class/src/PDFBuilder.js~PDFBuilder.html#instance-method-setForm",
-    "src/PDFBuilder.js~PDFBuilder#setForm",
     "method"
   ],
   [
@@ -12537,6 +12537,12 @@ window.esdocSearchIndex = [
     "src/components/textfield/fixtures/comp3.js",
     "file/src/components/textfield/fixtures/comp3.js.html",
     "src/components/textfield/fixtures/comp3.js",
+    "file"
+  ],
+  [
+    "src/components/textfield/fixtures/comp4.js",
+    "file/src/components/textfield/fixtures/comp4.js.html",
+    "src/components/textfield/fixtures/comp4.js",
     "file"
   ],
   [

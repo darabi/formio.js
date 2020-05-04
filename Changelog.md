@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.9.20
+### Changed
+ - No changes. Released 4.9.20-rc.4
+
+## 4.9.20-rc.4
+### Fixed
+ - Problem where PDF components could not get deleted from the form.
+
+## 4.9.20-rc.3
+### Fixed
+ - Issue introduced with rc.2 where the builder components would not show up.
+
+## 4.9.20-rc.2
+### Fixed
+ - FJS-815 - Fixed multiple mask selector disabling when the component is disabled #2667
+ - Improve Select component itemTemplate check #2668
+ - FJS-848 - Fixed adding and immediate deleting wizard page is not saved #2670
+ - PDF 49 - Fixed issues with the PDF form would double submit. #2671
+ - FJS 878 - Fixed refresh issues when building PDF forms. #2671
+ - Fixing issue where select value would not show up if lazyload and html5 widget is enabled.
+
+## 4.9.20-rc.1
+### Changed
+ - Added message to focus on pdf form component
+ - PDF 21 - Focus on the first invalid field on form submission
+ - FJS-811 - fixed possibility to add tags that exceed maxTags limit
+
 ## 4.9.19
 ### Changed
  - No changes. 4.9.19-rc.3 production release.
