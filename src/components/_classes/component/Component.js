@@ -11,9 +11,9 @@ import Templates from '../../../templates/Templates';
 import { fastCloneDeep, boolValue } from '../../../utils/utils';
 import Element from '../../../Element';
 import ComponentModal from '../componentModal/ComponentModal';
-const CKEDITOR = 'https://cdn.form.io/ckeditor/12.2.0/ckeditor.js';
-const QUILL_URL = 'https://cdn.form.io/quill/1.3.6';
-const ACE_URL = 'https://cdn.form.io/ace/1.4.5/ace.js';
+const CKEDITOR = 'https://cdn.form.io/ckeditor/16.0.0/ckeditor.js';
+const QUILL_URL = 'https://cdn.form.io/quill/1.3.7';
+const ACE_URL = 'https://cdn.form.io/ace/1.4.7/ace.js';
 const TINYMCE_URL = 'https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js';
 
 /**
@@ -234,7 +234,7 @@ export default class Component extends Element {
      * The Form.io component JSON schema.
      * @type {*}
      */
-    this.component = _.defaultsDeep(component || {} , this.defaultSchema);
+    this.component = this.mergeSchema(component || {});
 
     // Save off the original component to be used in logic.
     this.originalComponent = fastCloneDeep(this.component);
@@ -405,6 +405,10 @@ export default class Component extends Element {
     }
   }
   /* eslint-enable max-statements */
+
+  mergeSchema(component = {}) {
+    return _.defaultsDeep(component, this.defaultSchema);
+  }
 
   // Allow componets to notify when ready.
   get ready() {
@@ -724,7 +728,14 @@ export default class Component extends Element {
     data.value = data.value || this.dataValue;
     data.disabled = this.disabled;
     data.builder = this.builderMode;
-    data.render = this.renderTemplate.bind(this);
+    data.render = (...args) => {
+      console.warn(`Form.io 'render' template function is deprecated.
+      If you need to render template (template A) inside of another template (template B),
+      pass pre-compiled template A (use this.renderTemplate('template_A_name') as template context variable for template B`);
+      return this.renderTemplate(...args);
+    };
+    data.label = this.labelInfo;
+    data.tooltip = this.interpolate(this.component.tooltip || '').replace(/(?:\r\n|\r|\n)/g, '<br />');
 
     // Allow more specific template names
     const names = [
@@ -915,7 +926,7 @@ export default class Component extends Element {
     this.refs.tooltip.forEach((tooltip, index) => {
       const title = this.interpolate(tooltip.getAttribute('data-title') || this.t(this.component.tooltip)).replace(/(?:\r\n|\r|\n)/g, '<br />');
       this.tooltips[index] = new Tooltip(tooltip, {
-        trigger: 'hover click',
+        trigger: 'hover click focus',
         placement: 'right',
         html: true,
         title: title,
@@ -1276,7 +1287,9 @@ export default class Component extends Element {
 
   iconClass(name, spinning) {
     const iconset = this.options.iconset || Templates.current.defaultIconset || 'fa';
-    return Templates.current.hasOwnProperty('iconClass') ? Templates.current.iconClass(iconset, name, spinning) : name;
+    return Templates.current.hasOwnProperty('iconClass')
+      ? Templates.current.iconClass(iconset, name, spinning)
+      : this.options.iconset === 'fa' ? Templates.defaultTemplates.iconClass(iconset, name, spinning) : name;
   }
 
   /**
@@ -1493,6 +1506,32 @@ export default class Component extends Element {
     }
 
     return changed;
+  }
+
+  isIE() {
+    const userAgent = window.navigator.userAgent;
+
+    const msie = userAgent.indexOf('MSIE ');
+    if (msie > 0) {
+      // IE 10 or older => return version number
+      return parseInt(userAgent.substring(msie + 5, userAgent.indexOf('.', msie)), 10);
+    }
+
+    const trident = userAgent.indexOf('Trident/');
+    if (trident > 0) {
+      // IE 11 => return version number
+      const rv = userAgent.indexOf('rv:');
+      return parseInt(userAgent.substring(rv + 3, userAgent.indexOf('.', rv)), 10);
+    }
+
+    const edge = userAgent.indexOf('Edge/');
+    if (edge > 0) {
+      // IE 12 (aka Edge) => return version number
+      return parseInt(userAgent.substring(edge + 5, userAgent.indexOf('.', edge)), 10);
+    }
+
+    // other browser
+    return false;
   }
 
   applyActions(newComponent, actions, result, row, data) {
@@ -1715,15 +1754,32 @@ export default class Component extends Element {
     };
   }
 
+  get ckEditorConfig() {
+    return {
+      image: {
+        toolbar: [
+          'imageTextAlternative',
+          '|',
+          'imageStyle:full',
+          'imageStyle:alignLeft',
+          'imageStyle:alignCenter',
+          'imageStyle:alignRight'
+        ],
+        styles: [
+          'full',
+          'alignLeft',
+          'alignCenter',
+          'alignRight'
+        ]
+      }
+    };
+  }
+
   addCKE(element, settings, onChange) {
     settings = _.isEmpty(settings) ? {} : settings;
     settings.base64Upload = true;
     settings.mediaEmbed = { previewsInData: true };
-    settings.image = {
-      toolbar: ['imageTextAlternative', '|', 'imageStyle:full', 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight'],
-      styles: ['full', 'alignLeft', 'alignCenter', 'alignRight']
-    };
-    settings = _.merge(_.get(this.options, 'editors.ckeditor.settings', {}), settings);
+    settings = _.merge(_.get(this.options, 'editors.ckeditor.settings', this.ckEditorConfig), settings);
     return Formio.requireLibrary('ckeditor', 'ClassicEditor', _.get(this.options, 'editors.ckeditor.src', CKEDITOR), true)
       .then(() => {
         if (!element.parentNode) {
@@ -1791,16 +1847,18 @@ export default class Component extends Element {
   }
 
   addAce(element, settings, onChange) {
-    settings = _.merge(_.get(this.options, 'editors.ace.settings', {}), settings || {});
+    const defaultAceSettings = {
+      maxLines: 12,
+      minLines: 12,
+      tabSize: 2,
+      mode: 'javascript',
+    };
+    settings = _.merge({}, defaultAceSettings, _.get(this.options, 'editors.ace.settings', {}), settings || {});
     return Formio.requireLibrary('ace', 'ace', _.get(this.options, 'editors.ace.src', ACE_URL), true)
       .then((editor) => {
         editor = editor.edit(element);
         editor.removeAllListeners('change');
-        editor.setOptions({
-          maxLines: 12,
-          minLines: 12
-        });
-        editor.getSession().setTabSize(2);
+        editor.setOptions(settings);
         editor.getSession().setMode(`ace/mode/${settings.mode}`);
         editor.on('change', () => onChange(editor.getValue()));
         return editor;
@@ -1820,6 +1878,10 @@ export default class Component extends Element {
           },
         });
       });
+  }
+
+  get tree() {
+    return this.component.tree || false;
   }
 
   /**
@@ -1946,7 +2008,7 @@ export default class Component extends Element {
     }
 
     // Clone so that it creates a new instance.
-    return _.clone(defaultValue);
+    return _.cloneDeep(defaultValue);
   }
 
   /**
