@@ -504,6 +504,14 @@ export default [
     },
   },
   {
+    type: 'textfield',
+    label: 'Options Changed Event',
+    key: 'optionsChangedEvent',
+    input: true,
+    weight: 20.5,
+    tooltip: 'The event to fire when the select options have changed.'
+  },
+  {
     type: 'checkbox',
     input: true,
     weight: 21,
