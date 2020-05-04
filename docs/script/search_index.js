@@ -960,6 +960,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "formiojs/src/utils/utils.js~getarrayfromcomponentpath",
+    "function/index.html#static-function-getArrayFromComponentPath",
+    "<span>getArrayFromComponentPath</span> <span class=\"search-result-import-path\">formiojs/src/utils/utils.js</span>",
+    "function"
+  ],
+  [
     "formiojs/src/utils/formutils.js~getcomponent",
     "function/index.html#static-function-getComponent",
     "<span>getComponent</span> <span class=\"search-result-import-path\">formiojs/src/utils/formUtils.js</span>",
@@ -1023,6 +1029,12 @@ window.esdocSearchIndex = [
     "formiojs/src/utils/utils.js~getrandomcomponentid",
     "function/index.html#static-function-getRandomComponentId",
     "<span>getRandomComponentId</span> <span class=\"search-result-import-path\">formiojs/src/utils/utils.js</span>",
+    "function"
+  ],
+  [
+    "formiojs/src/utils/utils.js~getstringfromcomponentpath",
+    "function/index.html#static-function-getStringFromComponentPath",
+    "<span>getStringFromComponentPath</span> <span class=\"search-result-import-path\">formiojs/src/utils/utils.js</span>",
     "function"
   ],
   [
@@ -2484,6 +2496,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/pdf.js~pdf#rebuild",
+    "class/src/PDF.js~PDF.html#instance-method-rebuild",
+    "src/PDF.js~PDF#rebuild",
+    "method"
+  ],
+  [
     "src/pdf.js~pdf#redraw",
     "class/src/PDF.js~PDF.html#instance-method-redraw",
     "src/PDF.js~PDF#redraw",
@@ -2518,6 +2536,12 @@ window.esdocSearchIndex = [
     "class/src/PDF.js~PDF.html#instance-method-showErrors",
     "src/PDF.js~PDF#showErrors",
     "method"
+  ],
+  [
+    "src/pdf.js~pdf#submitbutton",
+    "class/src/PDF.js~PDF.html#instance-member-submitButton",
+    "src/PDF.js~PDF#submitButton",
+    "member"
   ],
   [
     "src/pdf.js~pdf#submitform",
@@ -2643,12 +2667,6 @@ window.esdocSearchIndex = [
     "src/pdfbuilder.js~pdfbuilder#render",
     "class/src/PDFBuilder.js~PDFBuilder.html#instance-method-render",
     "src/PDFBuilder.js~PDFBuilder#render",
-    "method"
-  ],
-  [
-    "src/pdfbuilder.js~pdfbuilder#savecomponent",
-    "class/src/PDFBuilder.js~PDFBuilder.html#instance-method-saveComponent",
-    "src/PDFBuilder.js~PDFBuilder#saveComponent",
     "method"
   ],
   [
@@ -3423,6 +3441,12 @@ window.esdocSearchIndex = [
     "src/webformbuilder.js~webformbuilder#highlightinvalidcomponents",
     "class/src/WebformBuilder.js~WebformBuilder.html#instance-method-highlightInvalidComponents",
     "src/WebformBuilder.js~WebformBuilder#highlightInvalidComponents",
+    "method"
+  ],
+  [
+    "src/webformbuilder.js~webformbuilder#init",
+    "class/src/WebformBuilder.js~WebformBuilder.html#instance-method-init",
+    "src/WebformBuilder.js~WebformBuilder#init",
     "method"
   ],
   [
@@ -9219,6 +9243,12 @@ window.esdocSearchIndex = [
     "src/components/file/file.js~filecomponent#deletefile",
     "class/src/components/file/File.js~FileComponent.html#instance-method-deleteFile",
     "src/components/file/File.js~FileComponent#deleteFile",
+    "method"
+  ],
+  [
+    "src/components/file/file.js~filecomponent#destroy",
+    "class/src/components/file/File.js~FileComponent.html#instance-method-destroy",
+    "src/components/file/File.js~FileComponent#destroy",
     "method"
   ],
   [
