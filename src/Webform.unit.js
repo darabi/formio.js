@@ -1,6 +1,7 @@
 import assert from 'power-assert';
 import { expect } from 'chai';
 import sinon from 'sinon';
+import _ from 'lodash';
 import each from 'lodash/each';
 import Harness from '../test/harness';
 import FormTests from '../test/forms';
@@ -18,8 +19,6 @@ describe('Webform tests', () => {
     formWithCalculatedValue.setForm(manualOverride).then(() => {
       Harness.clickElement(formWithCalculatedValue, formWithCalculatedValue.components[2].refs.button);
       setTimeout(() => {
-        console.log(formWithCalculatedValue.errors.length);
-
         const inputEvent = new Event('input');
         const input1 = formWithCalculatedValue.components[0].refs.input[0];
 
@@ -35,6 +34,48 @@ describe('Webform tests', () => {
       }, 250);
     })
     .catch((err) => done(err));
+  });
+
+  it('Should calculate the value when editing set values with possibility of manual override', function(done) {
+    const formElement = document.createElement('div');
+    formWithCalculatedValue = new Webform(formElement);
+    formWithCalculatedValue.setForm(manualOverride).then(() => {
+      formWithCalculatedValue.setSubmission({
+        data:{
+          number1: 66,
+          number2:66
+        }
+      }).then(()=>{
+        setTimeout(()=>{
+          const input1 = formElement.querySelector('input[name="data[number1]"]');
+          const input2 = formElement.querySelector('input[name="data[number2]"]');
+
+          assert.equal(input2.value, '66');
+          assert.equal(input1.value, 66);
+
+          const inputEvent = new Event('input');
+
+          input1.value =  `${input1.value}` + '78';
+          input1.dispatchEvent(inputEvent);
+
+          setTimeout(() => {
+            assert.equal(input2.value, '6678');
+            assert.equal(input1.value, 6678);
+            //set a number as calculated value
+            formWithCalculatedValue.components[1].calculatedValue = 6678;
+            //change the value
+            input1.value =  +(`${input1.value}` + '90');
+            input1.dispatchEvent(inputEvent);
+
+            setTimeout(() => {
+              assert.equal(input2.value, '667890');
+              assert.equal(input1.value, 667890);
+              done();
+            }, 250);
+          }, 250);
+        }, 900);
+      });
+    });
   });
 
   let simpleForm = null;
@@ -735,6 +776,35 @@ describe('Webform tests', () => {
           assert.equal(count, 1);
           done();
         }, 500);
+      });
+    });
+  });
+
+  describe('ReadOnly Form', () => {
+    it('Should apply conditionals when in readOnly mode.', (done) => {
+      done = _.once(done);
+      const Conditions = require('../test/forms/conditions').default;
+      const formElement = document.createElement('div');
+      const form = new Webform(formElement, {
+        readOnly: true,
+        language: 'en',
+        template: 'bootstrap3'
+      });
+      form.setForm(Conditions.form).then(() => {
+        Harness.testConditionals(form, {
+          data: {
+            typeShow: 'Show',
+            typeMe: 'Me',
+            typeThe: 'The',
+            typeMonkey: 'Monkey!'
+          }
+        }, [], (error) => {
+          form.destroy();
+          if (error) {
+            throw new Error(error);
+          }
+          done();
+        });
       });
     });
   });

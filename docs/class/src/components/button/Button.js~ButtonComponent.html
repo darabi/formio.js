@@ -197,6 +197,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fieldData">fieldData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatOffset">formatOffset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getArrayFromComponentPath">getArrayFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContextComponents">getContextComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getCurrencyAffixes">getCurrencyAffixes</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getDateSetting">getDateSetting</a></span></span></li>
@@ -207,6 +208,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getNumberSeparators">getNumberSeparators</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPropertyValue">getPropertyValue</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRandomComponentId">getRandomComponentId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getStringFromComponentPath">getStringFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-guid">guid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isInputComponent">isInputComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isMongoId">isMongoId</a></span></span></li>
@@ -4125,14 +4127,13 @@ to perform special async functions.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html#instance-method-calculateComponentValue">calculateComponentValue</a></span></span><span class="code" data-ice="signature">(data: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html#instance-method-calculateComponentValue">calculateComponentValue</a></span></span><span class="code" data-ice="signature">(data: <span>*</span>, flags: <span>*</span>, row: <span>*</span>): <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Perform a calculated value operation.</p>
-</div>
+        
       </div>
     </td>
     <td>
@@ -4588,6 +4589,35 @@ something changed.</p>
         
         
         <div data-ice="description"><p>Check if this component is conditionally visible.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html#instance-method-convertNumberOrBoolToString">convertNumberOrBoolToString</a></span></span><span class="code" data-ice="signature">(data: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Perform a calculated value operation.</p>
 </div>
       </div>
     </td>
@@ -6740,6 +6770,34 @@ protected.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html#instance-method-size">size</a></span></span><span class="code" data-ice="signature">(size: <span>*</span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html#instance-method-splice">splice</a></span></span><span class="code" data-ice="signature">(index: <span>*</span>)</span>
         </p>
       </div>
@@ -7273,7 +7331,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber232">source</a></span></span>
     </span>
   </h3>
 
@@ -7711,7 +7769,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber204">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber207">source</a></span></span>
     </span>
   </h3>
 
@@ -7939,7 +7997,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber217">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
@@ -7999,7 +8057,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber392">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber395">source</a></span></span>
     </span>
   </h3>
 
@@ -8098,7 +8156,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber223">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber226">source</a></span></span>
     </span>
   </h3>
 
@@ -8157,7 +8215,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber317">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber320">source</a></span></span>
     </span>
   </h3>
 
@@ -8255,7 +8313,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber398">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/button/Button.js.html#lineNumber401">source</a></span></span>
     </span>
   </h3>
 

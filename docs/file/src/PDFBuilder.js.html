@@ -197,6 +197,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fieldData">fieldData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatOffset">formatOffset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getArrayFromComponentPath">getArrayFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContextComponents">getContextComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getCurrencyAffixes">getCurrencyAffixes</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getDateSetting">getDateSetting</a></span></span></li>
@@ -207,6 +208,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getNumberSeparators">getNumberSeparators</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPropertyValue">getPropertyValue</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRandomComponentId">getRandomComponentId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getStringFromComponentPath">getStringFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-guid">guid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isInputComponent">isInputComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isMongoId">isMongoId</a></span></span></li>
@@ -431,6 +433,12 @@ export default class PDFBuilder extends WebformBuilder {
   }
 
   afterAttach() {
+    this.on(&apos;saveComponent&apos;, (schema, component) =&gt; {
+      this.webform.postMessage({ name: &apos;updateElement&apos;, data: component });
+    });
+    this.on(&apos;removeComponent&apos;, (component) =&gt; {
+      this.webform.postMessage({ name: &apos;removeElement&apos;, data: component });
+    });
     this.initIframeEvents();
     this.updateDropzoneDimensions();
     this.initDropzoneEvents();
@@ -495,22 +503,6 @@ export default class PDFBuilder extends WebformBuilder {
     return this.webform;
   }
 
-  setForm(form) {
-    return super.setForm(form).then(() =&gt; {
-      return this.ready.then(() =&gt; {
-        if (this.webform) {
-          this.webform.postMessage({ name: &apos;form&apos;, data: form });
-          return this.webform.setForm(form);
-        }
-        return form;
-      });
-    });
-  }
-
-  saveComponent(...args) {
-    return super.saveComponent(...args).then(() =&gt; this.afterAttach());
-  }
-
   destroy() {
     super.destroy();
     this.webform.destroy();
@@ -542,7 +534,10 @@ export default class PDFBuilder extends WebformBuilder {
           height: schema.height,
           width: schema.width
         };
-        this.editComponent(component.component, this.webform.iframeElement);
+
+        if (!this.options.noNewEdit) {
+          this.editComponent(component.component, this.webform.iframeElement);
+        }
         this.emit(&apos;updateComponent&apos;, component);
       }
       return component;
@@ -668,10 +663,8 @@ export default class PDFBuilder extends WebformBuilder {
 
     // Set a unique key for this component.
     BuilderUtils.uniquify([this.webform.component], schema);
-
+    this.emit(&apos;addComponent&apos;, schema, this.webform, schema.key, this.webform.component.components.length, true);
     this.webform.component.components.push(schema);
-
-    this.emit(&apos;addComponent&apos;, schema);
 
     schema.overlay = {
       top: offsetY,

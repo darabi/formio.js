@@ -211,6 +211,11 @@ export default class Component extends Element {
       attachMode: 'full'
     }, options || {}));
 
+    // Restore the component id.
+    if (component && component.id) {
+      this.id = component.id;
+    }
+
     /**
      * Determines if this component has a condition assigned to it.
      * @type {null}
@@ -793,6 +798,7 @@ export default class Component extends Element {
     data.options = this.options;
     data.readOnly = this.options.readOnly;
     data.iconClass = this.iconClass.bind(this);
+    data.size = this.size.bind(this);
     data.t = this.t.bind(this);
     data.transform = this.transform;
     data.id = data.id || this.id;
@@ -1379,6 +1385,12 @@ export default class Component extends Element {
       : this.options.iconset === 'fa' ? Templates.defaultTemplates.iconClass(iconset, name, spinning) : name;
   }
 
+  size(size) {
+    return Templates.current.hasOwnProperty('size')
+      ? Templates.current.size(size)
+      : size;
+  }
+
   /**
    * The readible name for this component.
    * @returns {string} - The name of the component.
@@ -1940,6 +1952,13 @@ export default class Component extends Element {
       tabSize: 2,
       mode: 'javascript',
     };
+    if (!settings || (settings.theme === 'snow')) {
+      const mode = settings ? settings.mode : '';
+      settings = {};
+      if (mode) {
+        settings.mode = mode;
+      }
+    }
     settings = _.merge({}, defaultAceSettings, _.get(this.options, 'editors.ace.settings', {}), settings || {});
     return Formio.requireLibrary('ace', 'ace', _.get(this.options, 'editors.ace.src', ACE_URL), true)
       .then((editor) => {
@@ -2300,6 +2319,7 @@ export default class Component extends Element {
     if (
       newValue !== undefined &&
       newValue !== null &&
+      this.allowData &&
       !this.hasValue()
     ) {
       return true;
@@ -2327,6 +2347,14 @@ export default class Component extends Element {
    *
    * @return {boolean} - If the value changed during calculation.
    */
+
+  convertNumberOrBoolToString(value) {
+    if (typeof value === 'number' || typeof value === 'boolean' ) {
+      return value.toString();
+    }
+    return value;
+  }
+
   calculateComponentValue(data, flags, row) {
     // If no calculated value or
     // hidden and set to clearOnHide (Don't calculate a value for a hidden field set to clear when hidden)
@@ -2349,8 +2377,8 @@ export default class Component extends Element {
     // Check to ensure that the calculated value is different than the previously calculated value.
     if (
       allowOverride &&
-      (this.calculatedValue !== null) &&
-      !_.isEqual(dataValue, this.calculatedValue)
+      this.calculatedValue &&
+      !_.isEqual(dataValue, this.convertNumberOrBoolToString(this.calculatedValue))
     ) {
       return false;
     }
@@ -2367,7 +2395,7 @@ export default class Component extends Element {
       allowOverride &&
       firstPass &&
       !this.isEmpty(dataValue) &&
-      !_.isEqual(dataValue, calculatedValue)
+      !_.isEqual(dataValue, this.convertNumberOrBoolToString(calculatedValue))
     ) {
       // Return that we have a change so it will perform another pass.
       this.calculatedValue = calculatedValue;
@@ -2651,6 +2679,8 @@ export default class Component extends Element {
 
   shouldSkipValidation(data, dirty, row) {
     const rules = [
+      // Force valid if component is read-only
+      () => this.options.readOnly,
       // Check to see if we are editing and if so, check component persistence.
       () => this.isValueHidden(),
       // Force valid if component is hidden.
@@ -2790,6 +2820,10 @@ export default class Component extends Element {
   }
 
   attachLogic() {
+    // Do not attach logic during builder mode.
+    if (this.builderMode) {
+      return;
+    }
     this.logic.forEach((logic) => {
       if (logic.trigger.type === 'event') {
         const event = this.interpolate(logic.trigger.event);

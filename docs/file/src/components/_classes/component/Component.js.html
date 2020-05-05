@@ -197,6 +197,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fieldData">fieldData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatOffset">formatOffset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getArrayFromComponentPath">getArrayFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContextComponents">getContextComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getCurrencyAffixes">getCurrencyAffixes</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getDateSetting">getDateSetting</a></span></span></li>
@@ -207,6 +208,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getNumberSeparators">getNumberSeparators</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPropertyValue">getPropertyValue</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRandomComponentId">getRandomComponentId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getStringFromComponentPath">getStringFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-guid">guid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isInputComponent">isInputComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isMongoId">isMongoId</a></span></span></li>
@@ -452,6 +454,11 @@ export default class Component extends Element {
       renderMode: &apos;form&apos;,
       attachMode: &apos;full&apos;
     }, options || {}));
+
+    // Restore the component id.
+    if (component &amp;&amp; component.id) {
+      this.id = component.id;
+    }
 
     /**
      * Determines if this component has a condition assigned to it.
@@ -1035,6 +1042,7 @@ export default class Component extends Element {
     data.options = this.options;
     data.readOnly = this.options.readOnly;
     data.iconClass = this.iconClass.bind(this);
+    data.size = this.size.bind(this);
     data.t = this.t.bind(this);
     data.transform = this.transform;
     data.id = data.id || this.id;
@@ -1621,6 +1629,12 @@ export default class Component extends Element {
       : this.options.iconset === &apos;fa&apos; ? Templates.defaultTemplates.iconClass(iconset, name, spinning) : name;
   }
 
+  size(size) {
+    return Templates.current.hasOwnProperty(&apos;size&apos;)
+      ? Templates.current.size(size)
+      : size;
+  }
+
   /**
    * The readible name for this component.
    * @returns {string} - The name of the component.
@@ -2182,6 +2196,13 @@ export default class Component extends Element {
       tabSize: 2,
       mode: &apos;javascript&apos;,
     };
+    if (!settings || (settings.theme === &apos;snow&apos;)) {
+      const mode = settings ? settings.mode : &apos;&apos;;
+      settings = {};
+      if (mode) {
+        settings.mode = mode;
+      }
+    }
     settings = _.merge({}, defaultAceSettings, _.get(this.options, &apos;editors.ace.settings&apos;, {}), settings || {});
     return Formio.requireLibrary(&apos;ace&apos;, &apos;ace&apos;, _.get(this.options, &apos;editors.ace.src&apos;, ACE_URL), true)
       .then((editor) =&gt; {
@@ -2542,6 +2563,7 @@ export default class Component extends Element {
     if (
       newValue !== undefined &amp;&amp;
       newValue !== null &amp;&amp;
+      this.allowData &amp;&amp;
       !this.hasValue()
     ) {
       return true;
@@ -2569,6 +2591,14 @@ export default class Component extends Element {
    *
    * @return {boolean} - If the value changed during calculation.
    */
+
+  convertNumberOrBoolToString(value) {
+    if (typeof value === &apos;number&apos; || typeof value === &apos;boolean&apos; ) {
+      return value.toString();
+    }
+    return value;
+  }
+
   calculateComponentValue(data, flags, row) {
     // If no calculated value or
     // hidden and set to clearOnHide (Don&apos;t calculate a value for a hidden field set to clear when hidden)
@@ -2591,8 +2621,8 @@ export default class Component extends Element {
     // Check to ensure that the calculated value is different than the previously calculated value.
     if (
       allowOverride &amp;&amp;
-      (this.calculatedValue !== null) &amp;&amp;
-      !_.isEqual(dataValue, this.calculatedValue)
+      this.calculatedValue &amp;&amp;
+      !_.isEqual(dataValue, this.convertNumberOrBoolToString(this.calculatedValue))
     ) {
       return false;
     }
@@ -2609,7 +2639,7 @@ export default class Component extends Element {
       allowOverride &amp;&amp;
       firstPass &amp;&amp;
       !this.isEmpty(dataValue) &amp;&amp;
-      !_.isEqual(dataValue, calculatedValue)
+      !_.isEqual(dataValue, this.convertNumberOrBoolToString(calculatedValue))
     ) {
       // Return that we have a change so it will perform another pass.
       this.calculatedValue = calculatedValue;
@@ -2893,6 +2923,8 @@ export default class Component extends Element {
 
   shouldSkipValidation(data, dirty, row) {
     const rules = [
+      // Force valid if component is read-only
+      () =&gt; this.options.readOnly,
       // Check to see if we are editing and if so, check component persistence.
       () =&gt; this.isValueHidden(),
       // Force valid if component is hidden.
@@ -3032,6 +3064,10 @@ export default class Component extends Element {
   }
 
   attachLogic() {
+    // Do not attach logic during builder mode.
+    if (this.builderMode) {
+      return;
+    }
     this.logic.forEach((logic) =&gt; {
       if (logic.trigger.type === &apos;event&apos;) {
         const event = this.interpolate(logic.trigger.event);

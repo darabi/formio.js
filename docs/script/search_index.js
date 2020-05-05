@@ -960,6 +960,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "formiojs/src/utils/utils.js~getarrayfromcomponentpath",
+    "function/index.html#static-function-getArrayFromComponentPath",
+    "<span>getArrayFromComponentPath</span> <span class=\"search-result-import-path\">formiojs/src/utils/utils.js</span>",
+    "function"
+  ],
+  [
     "formiojs/src/utils/formutils.js~getcomponent",
     "function/index.html#static-function-getComponent",
     "<span>getComponent</span> <span class=\"search-result-import-path\">formiojs/src/utils/formUtils.js</span>",
@@ -1023,6 +1029,12 @@ window.esdocSearchIndex = [
     "formiojs/src/utils/utils.js~getrandomcomponentid",
     "function/index.html#static-function-getRandomComponentId",
     "<span>getRandomComponentId</span> <span class=\"search-result-import-path\">formiojs/src/utils/utils.js</span>",
+    "function"
+  ],
+  [
+    "formiojs/src/utils/utils.js~getstringfromcomponentpath",
+    "function/index.html#static-function-getStringFromComponentPath",
+    "<span>getStringFromComponentPath</span> <span class=\"search-result-import-path\">formiojs/src/utils/utils.js</span>",
     "function"
   ],
   [
@@ -2142,6 +2154,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/formio.js~formio.addtoglobal",
+    "class/src/Formio.js~Formio.html#static-method-addToGlobal",
+    "src/Formio.js~Formio.addToGlobal",
+    "method"
+  ],
+  [
     "src/formio.js~formio.clearcache",
     "class/src/Formio.js~Formio.html#static-method-clearCache",
     "src/Formio.js~Formio.clearCache",
@@ -2430,6 +2448,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/pdf.js~pdf#focusoncomponent",
+    "class/src/PDF.js~PDF.html#instance-method-focusOnComponent",
+    "src/PDF.js~PDF#focusOnComponent",
+    "method"
+  ],
+  [
     "src/pdf.js~pdf#getsrc",
     "class/src/PDF.js~PDF.html#instance-method-getSrc",
     "src/PDF.js~PDF#getSrc",
@@ -2478,6 +2502,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/pdf.js~pdf#rebuild",
+    "class/src/PDF.js~PDF.html#instance-method-rebuild",
+    "src/PDF.js~PDF#rebuild",
+    "method"
+  ],
+  [
     "src/pdf.js~pdf#redraw",
     "class/src/PDF.js~PDF.html#instance-method-redraw",
     "src/PDF.js~PDF#redraw",
@@ -2512,6 +2542,12 @@ window.esdocSearchIndex = [
     "class/src/PDF.js~PDF.html#instance-method-showErrors",
     "src/PDF.js~PDF#showErrors",
     "method"
+  ],
+  [
+    "src/pdf.js~pdf#submitbutton",
+    "class/src/PDF.js~PDF.html#instance-member-submitButton",
+    "src/PDF.js~PDF#submitButton",
+    "member"
   ],
   [
     "src/pdf.js~pdf#submitform",
@@ -2637,18 +2673,6 @@ window.esdocSearchIndex = [
     "src/pdfbuilder.js~pdfbuilder#render",
     "class/src/PDFBuilder.js~PDFBuilder.html#instance-method-render",
     "src/PDFBuilder.js~PDFBuilder#render",
-    "method"
-  ],
-  [
-    "src/pdfbuilder.js~pdfbuilder#savecomponent",
-    "class/src/PDFBuilder.js~PDFBuilder.html#instance-method-saveComponent",
-    "src/PDFBuilder.js~PDFBuilder#saveComponent",
-    "method"
-  ],
-  [
-    "src/pdfbuilder.js~pdfbuilder#setform",
-    "class/src/PDFBuilder.js~PDFBuilder.html#instance-method-setForm",
-    "src/PDFBuilder.js~PDFBuilder#setForm",
     "method"
   ],
   [
@@ -3417,6 +3441,12 @@ window.esdocSearchIndex = [
     "src/webformbuilder.js~webformbuilder#highlightinvalidcomponents",
     "class/src/WebformBuilder.js~WebformBuilder.html#instance-method-highlightInvalidComponents",
     "src/WebformBuilder.js~WebformBuilder#highlightInvalidComponents",
+    "method"
+  ],
+  [
+    "src/webformbuilder.js~webformbuilder#init",
+    "class/src/WebformBuilder.js~WebformBuilder.html#instance-method-init",
+    "src/WebformBuilder.js~WebformBuilder#init",
     "method"
   ],
   [
@@ -4416,6 +4446,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/components/_classes/component/component.js~component#convertnumberorbooltostring",
+    "class/src/components/_classes/component/Component.js~Component.html#instance-method-convertNumberOrBoolToString",
+    "src/components/_classes/component/Component.js~Component#convertNumberOrBoolToString",
+    "method"
+  ],
+  [
     "src/components/_classes/component/component.js~component#createmodal",
     "class/src/components/_classes/component/Component.js~Component.html#instance-method-createModal",
     "src/components/_classes/component/Component.js~Component#createModal",
@@ -5205,6 +5241,12 @@ window.esdocSearchIndex = [
     "src/components/_classes/component/component.js~component#shouldskipvalidation",
     "class/src/components/_classes/component/Component.js~Component.html#instance-method-shouldSkipValidation",
     "src/components/_classes/component/Component.js~Component#shouldSkipValidation",
+    "method"
+  ],
+  [
+    "src/components/_classes/component/component.js~component#size",
+    "class/src/components/_classes/component/Component.js~Component.html#instance-method-size",
+    "src/components/_classes/component/Component.js~Component#size",
     "method"
   ],
   [
@@ -6874,18 +6916,6 @@ window.esdocSearchIndex = [
     "class/src/components/checkbox/Checkbox.js~CheckBoxComponent.html#instance-method-attach",
     "src/components/checkbox/Checkbox.js~CheckBoxComponent#attach",
     "method"
-  ],
-  [
-    "src/components/checkbox/checkbox.js~checkboxcomponent#datavalue",
-    "class/src/components/checkbox/Checkbox.js~CheckBoxComponent.html#instance-set-dataValue",
-    "src/components/checkbox/Checkbox.js~CheckBoxComponent#dataValue",
-    "member"
-  ],
-  [
-    "src/components/checkbox/checkbox.js~checkboxcomponent#datavalue",
-    "class/src/components/checkbox/Checkbox.js~CheckBoxComponent.html#instance-get-dataValue",
-    "src/components/checkbox/Checkbox.js~CheckBoxComponent#dataValue",
-    "member"
   ],
   [
     "src/components/checkbox/checkbox.js~checkboxcomponent#defaultschema",
@@ -8856,18 +8886,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/components/editgrid/editgrid.js~editgridcomponent#restorecomponentscontext",
-    "class/src/components/editgrid/EditGrid.js~EditGridComponent.html#instance-method-restoreComponentsContext",
-    "src/components/editgrid/EditGrid.js~EditGridComponent#restoreComponentsContext",
-    "method"
-  ],
-  [
-    "src/components/editgrid/editgrid.js~editgridcomponent#restorerowcontext",
-    "class/src/components/editgrid/EditGrid.js~EditGridComponent.html#instance-method-restoreRowContext",
-    "src/components/editgrid/EditGrid.js~EditGridComponent#restoreRowContext",
-    "method"
-  ],
-  [
     "src/components/editgrid/editgrid.js~editgridcomponent#saverow",
     "class/src/components/editgrid/EditGrid.js~EditGridComponent.html#instance-method-saveRow",
     "src/components/editgrid/EditGrid.js~EditGridComponent#saveRow",
@@ -9225,6 +9243,12 @@ window.esdocSearchIndex = [
     "src/components/file/file.js~filecomponent#deletefile",
     "class/src/components/file/File.js~FileComponent.html#instance-method-deleteFile",
     "src/components/file/File.js~FileComponent#deleteFile",
+    "method"
+  ],
+  [
+    "src/components/file/file.js~filecomponent#destroy",
+    "class/src/components/file/File.js~FileComponent.html#instance-method-destroy",
+    "src/components/file/File.js~FileComponent#destroy",
     "method"
   ],
   [
@@ -10884,6 +10908,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/components/select/select.js~selectcomponent#choicesoptions",
+    "class/src/components/select/Select.js~SelectComponent.html#instance-method-choicesOptions",
+    "src/components/select/Select.js~SelectComponent#choicesOptions",
+    "method"
+  ],
+  [
     "src/components/select/select.js~selectcomponent#dataready",
     "class/src/components/select/Select.js~SelectComponent.html#instance-get-dataReady",
     "src/components/select/Select.js~SelectComponent#dataReady",
@@ -12507,6 +12537,12 @@ window.esdocSearchIndex = [
     "src/components/textfield/fixtures/comp3.js",
     "file/src/components/textfield/fixtures/comp3.js.html",
     "src/components/textfield/fixtures/comp3.js",
+    "file"
+  ],
+  [
+    "src/components/textfield/fixtures/comp4.js",
+    "file/src/components/textfield/fixtures/comp4.js.html",
+    "src/components/textfield/fixtures/comp4.js",
     "file"
   ],
   [

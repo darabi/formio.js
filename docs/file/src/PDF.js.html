@@ -197,6 +197,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fieldData">fieldData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatOffset">formatOffset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getArrayFromComponentPath">getArrayFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContextComponents">getContextComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getCurrencyAffixes">getCurrencyAffixes</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getDateSetting">getDateSetting</a></span></span></li>
@@ -207,6 +208,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getNumberSeparators">getNumberSeparators</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPropertyValue">getPropertyValue</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRandomComponentId">getRandomComponentId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getStringFromComponentPath">getStringFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-guid">guid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isInputComponent">isInputComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isMongoId">isMongoId</a></span></span></li>
@@ -268,8 +270,10 @@ export default class PDF extends Webform {
       this.postMessage({
         name: &apos;iframePositions&apos;,
         data: {
-          iframeBoundingClientRect,
-          scrollY: window.scrollY
+          iframe: {
+            top: iframeBoundingClientRect.top
+          },
+          scrollY: window.scrollY || window.pageYOffset
         }
       });
     });
@@ -279,24 +283,50 @@ export default class PDF extends Webform {
   }
 
   render() {
+    this.submitButton = this.addComponent({
+      input: true,
+      type: &apos;button&apos;,
+      action: &apos;submit&apos;,
+      internal: true,
+      label: &apos;Submit&apos;,
+      key: &apos;submit&apos;,
+      ref: &apos;button&apos;
+    });
+
     return this.renderTemplate(&apos;pdf&apos;, {
+      submitButton: this.submitButton.render(),
       classes: &apos;formio-form-pdf&apos;,
       children: this.renderComponents()
     });
   }
 
   redraw() {
-    return super.redraw();
+    this.postMessage({ name: &apos;redraw&apos; });
+    return this.builderMode ? NativePromise.resolve() : super.redraw();
+  }
+
+  rebuild() {
+    if (this.builderMode &amp;&amp; this.component.components) {
+      this.destroyComponents();
+      this.addComponents();
+      return NativePromise.resolve();
+    }
+    this.postMessage({ name: &apos;redraw&apos; });
+    return super.rebuild();
   }
 
   attach(element) {
     return super.attach(element).then(() =&gt; {
       this.loadRefs(element, {
-        submitButton: &apos;single&apos;,
+        button: &apos;single&apos;,
+        buttonMessageContainer: &apos;single&apos;,
+        buttonMessage: &apos;single&apos;,
         zoomIn: &apos;single&apos;,
         zoomOut: &apos;single&apos;,
         iframeContainer: &apos;single&apos;
       });
+      this.submitButton.refs = { ...this.refs };
+      this.submitButton.attachButton();
 
       // Reset the iframeReady promise.
       this.iframeReady = new NativePromise((resolve, reject) =&gt; {
@@ -323,14 +353,10 @@ export default class PDF extends Webform {
       this.postMessage({ name: &apos;form&apos;, data: this.form });
 
       // Hide the submit button if the associated component is hidden
-      const submitButton = this.components.find(c =&gt; c.element === this.refs.submitButton);
-      this.refs.submitButton.classList.toggle(&apos;hidden&apos;, !submitButton.visible);
-
-      // Submit the form if they click the submit button.
-      this.addEventListener(this.refs.submitButton, &apos;click&apos;, () =&gt; {
-        this.postMessage({ name: &apos;getErrors&apos; });
-        return this.submit();
-      });
+      const submitButton = this.components.find(c =&gt; c.element === this.refs.button);
+      if (submitButton) {
+        this.refs.button.classList.toggle(&apos;hidden&apos;, !submitButton.visible);
+      }
 
       this.addEventListener(this.refs.zoomIn, &apos;click&apos;, (event) =&gt; {
         event.preventDefault();
@@ -373,6 +399,7 @@ export default class PDF extends Webform {
    * @return {*}
    */
   submitForm(options = {}) {
+    this.postMessage({ name: &apos;getErrors&apos; });
     return this.getSubmission().then(() =&gt; super.submitForm(options));
   }
 
@@ -404,6 +431,10 @@ export default class PDF extends Webform {
   }
 
   setForm(form) {
+    if (this.builderMode &amp;&amp; this.form.components) {
+      this.postMessage({ name: &apos;form&apos;, data: this.form });
+      return NativePromise.resolve();
+    }
     return super.setForm(form).then(() =&gt; {
       if (this.formio) {
         form.projectUrl = this.formio.projectUrl;
@@ -476,20 +507,40 @@ export default class PDF extends Webform {
     });
   }
 
+  focusOnComponent(key) {
+    this.postMessage({
+      name: &apos;focusErroredField&apos;,
+      data: key,
+    });
+  }
+
   // Do not clear the iframe.
   clear() {}
 
   showErrors(error, triggerEvent) {
-    const p = this.ce(&apos;p&apos;);
-    p.classList.add(&apos;help-block&apos;);
-    this.setContent(p, this.t(&apos;submitError&apos;));
-    p.addEventListener(&apos;click&apos;, () =&gt; {
-      window.scrollTo(0, 0);
-    });
-    const div = this.ce(&apos;div&apos;);
-    div.classList.add(&apos;has-error&apos;);
-    this.appendTo(p, div);
-    this.appendTo(div, this.element);
+    const helpBlock = document.getElementById(&apos;submit-error&apos;);
+
+    if (!helpBlock) {
+      const p = this.ce(&apos;p&apos;, { class: &apos;help-block&apos; });
+
+      this.setContent(p, this.t(&apos;submitError&apos;));
+      p.addEventListener(&apos;click&apos;, () =&gt; {
+        window.scrollTo(0, 0);
+      });
+
+      const div = this.ce(&apos;div&apos;, { id: &apos;submit-error&apos;, class: &apos;has-error&apos; });
+
+      this.appendTo(p, div);
+      this.appendTo(div, this.element);
+    }
+
+    if (!this.errors.length &amp;&amp; helpBlock) {
+      helpBlock.remove();
+    }
+
+    if (this.errors.length) {
+      this.focusOnComponent(this.errors[0].component.key);
+    }
 
     super.showErrors(error, triggerEvent);
   }

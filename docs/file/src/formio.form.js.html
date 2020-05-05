@@ -197,6 +197,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fieldData">fieldData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatOffset">formatOffset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getArrayFromComponentPath">getArrayFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContextComponents">getContextComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getCurrencyAffixes">getCurrencyAffixes</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getDateSetting">getDateSetting</a></span></span></li>
@@ -207,6 +208,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getNumberSeparators">getNumberSeparators</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPropertyValue">getPropertyValue</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRandomComponentId">getRandomComponentId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getStringFromComponentPath">getStringFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-guid">guid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isInputComponent">isInputComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isMongoId">isMongoId</a></span></span></li>
@@ -248,9 +250,9 @@ import Templates from &apos;./templates/Templates&apos;;
 import Providers from &apos;./providers&apos;;
 import Rules from &apos;./validator/Rules&apos;;
 import Formio from &apos;./Formio&apos;;
+import Form from &apos;./Form&apos;;
+import Utils from &apos;./utils&apos;;
 Components.setComponents(AllComponents);
-Formio.Components = Components;
-Formio.Templates = Templates;
 const registerPlugin = (plugin) =&gt; {
   // Sanity check.
   if (typeof plugin !== &apos;object&apos;) {
@@ -316,9 +318,21 @@ Formio.use = (...plugins) =&gt; {
     }
   });
 };
-export Form from &apos;./Form&apos;;
-export Utils from &apos;./utils&apos;;
-export { Builders, Components, Displays, Providers, Templates, Formio };
+
+// This is needed to maintain correct imports using the &quot;dist&quot; file.
+Formio.Components = Components;
+Formio.Templates = Templates;
+Formio.Builders = Builders;
+Formio.Utils = Utils;
+Formio.Form = Form;
+Formio.Displays = Displays;
+Formio.Providers = Providers;
+
+// This is strange, but is needed for &quot;premium&quot; components to import correctly.
+Formio.Formio = Formio;
+
+// Export the components.
+export { Builders, Components, Displays, Providers, Templates, Utils, Form, Formio };
 </code></pre>
 
 </div>

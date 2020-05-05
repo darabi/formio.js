@@ -197,6 +197,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fieldData">fieldData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatOffset">formatOffset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getArrayFromComponentPath">getArrayFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContextComponents">getContextComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getCurrencyAffixes">getCurrencyAffixes</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getDateSetting">getDateSetting</a></span></span></li>
@@ -207,6 +208,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getNumberSeparators">getNumberSeparators</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPropertyValue">getPropertyValue</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRandomComponentId">getRandomComponentId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getStringFromComponentPath">getStringFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-guid">guid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isInputComponent">isInputComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isMongoId">isMongoId</a></span></span></li>
@@ -644,14 +646,8 @@ export default class EditGridComponent extends NestedArrayComponent {
     const dataValue = this.dataValue || [];
     const editRow = this.editRows[rowIndex];
     this.setEditRowSettings(editRow);
-    const dataSnapshot = dataValue[rowIndex] ? fastCloneDeep(dataValue[rowIndex]) : {};
-    if (this.component.inlineEdit) {
-      editRow.backup = dataSnapshot;
-    }
-    else {
-      editRow.data = dataSnapshot;
-      this.restoreRowContext(editRow);
-    }
+    editRow.data = dataValue[rowIndex] ? dataValue[rowIndex] : {};
+    editRow.backup = dataValue[rowIndex] ? fastCloneDeep(dataValue[rowIndex]) : {};
     if (this.component.modal) {
       this.addRowModal(rowIndex);
     }
@@ -680,16 +676,13 @@ export default class EditGridComponent extends NestedArrayComponent {
       return;
     }
     if (editRow.editing) {
-      const dataValue = this.dataValue || [];
+      const dataValue = this.dataValue;
       editRow.dirty = false;
       editRow.isOpen = false;
       editRow.editing = false;
-      if (this.component.inlineEdit) {
-        this.dataValue[rowIndex] = editRow.backup;
-        editRow.data = editRow.backup;
-        this.restoreRowContext(editRow);
-      }
-      editRow.data = dataValue[rowIndex] || {};
+      dataValue[rowIndex] = editRow.data = editRow.backup;
+      this.dataValue = dataValue;
+      this.data = this._data;
       this.clearErrors(rowIndex);
     }
     else {
@@ -724,7 +717,6 @@ export default class EditGridComponent extends NestedArrayComponent {
         dataValue[rowIndex] = editRow.data;
       }
       else {
-        // Insert this row into its proper place.
         const newIndex = dataValue.length;
         dataValue.push(editRow.data);
         this.editRows.splice(rowIndex, 1);
@@ -948,19 +940,6 @@ export default class EditGridComponent extends NestedArrayComponent {
       this.redraw();
     }
     return changed;
-  }
-
-  restoreComponentsContext() {
-    return;
-  }
-
-  restoreRowContext(editRow) {
-    editRow.components.forEach((component) =&gt; {
-      component.data = editRow.data;
-      if (_.has(editRow.data, component.key)) {
-        component.setValue(editRow.data[component.key]);
-      }
-    });
   }
 }
 

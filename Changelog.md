@@ -4,6 +4,151 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.9.20
+### Changed
+ - No changes. Released 4.9.20-rc.4
+
+## 4.9.20-rc.4
+### Fixed
+ - Problem where PDF components could not get deleted from the form.
+
+## 4.9.20-rc.3
+### Fixed
+ - Issue introduced with rc.2 where the builder components would not show up.
+
+## 4.9.20-rc.2
+### Fixed
+ - FJS-815 - Fixed multiple mask selector disabling when the component is disabled #2667
+ - Improve Select component itemTemplate check #2668
+ - FJS-848 - Fixed adding and immediate deleting wizard page is not saved #2670
+ - PDF 49 - Fixed issues with the PDF form would double submit. #2671
+ - FJS 878 - Fixed refresh issues when building PDF forms. #2671
+ - Fixing issue where select value would not show up if lazyload and html5 widget is enabled.
+
+## 4.9.20-rc.1
+### Changed
+ - Added message to focus on pdf form component
+ - PDF 21 - Focus on the first invalid field on form submission
+ - FJS-811 - fixed possibility to add tags that exceed maxTags limit
+
+## 4.9.19
+### Changed
+ - No changes. 4.9.19-rc.3 production release.
+
+## 4.9.19-rc.3
+### Fixed
+ - Fixing the PDF builder and form to not reset the forms when it changes.
+ - Changed pdf button to make it highlighted on form state changing
+ - FJS 858: Fixed no zeros in currency component when start editing
+ - Fix focus on invalid components
+ 
+### Changed
+ - Upgrade i18next@19.4.2, ismobilejs@1.1.1, raw-loader@4.0.1
+
+## 4.9.19-rc.2
+### Added
+ - A noNewEdit option to keep the edit modal from showing up when a new component is added.
+
+## 4.9.19-rc.1
+### Fixed
+ - Refresh issues with the PDF builder.
+ - Form builder demo to chage the JSON form correctly.
+ - Fixing erroneous spaces causing crashes in Chromium 
+ - Fixied memory leak by stopping video stream on destroy
+ - Don't replace choices when adding not found values
+ - FJS-844 implement basic fix for checkbox type radio submit values in tableView
+ - 'Add Another' button isn't translated with leading space
+
+### Changed
+ - Don't skip validation for disabled components
+ - Upgrade i18next@19.4.1, ismobilejs@1.1.0, jquery@3.5.0, dialog-polyfill@0.5.1
+
+### Added
+ - Add tests for the findComponent method, comment code
+ - Add context object while emit render event
+
+## 4.9.18
+### Changed
+ - Allow external modules to extend the Select options.
+ - Upgrade core-js@3.6.5, karma@5.0.1
+
+## 4.9.17
+### Fixed
+ - Issue where error would throw for some imports that would say "global" is not defined.
+
+## 4.9.16
+### Fixed
+ - Import issues with including this library in other libraries.
+ - Problem where infinite loops could occur with non-input components.
+
+### Added
+ - A way to override the alert classes
+ - A way to determine the "size" provided by templates.
+ 
+### Changed
+ - Upgraded @babel/preset-env@7.9.5, sinon@9.0.2, i18next@19.4.0, escape-string-regexp@3.0.0
+
+## 4.9.15
+### Fixed
+ - Problem where the ACE editor would use the wrong mode.
+ - FJS 850: DataGrid not redrawing after `setValue` with smaller amount of rows than it had
+
+## 4.9.14
+### Fixed
+ - Ensure the Formio object is attached to window to fix sites that include other modules systems still able to use Formio globally.
+
+### Changed
+ - Add options for values for Select component configurations.
+
+## 4.9.13
+### Fixed
+ - Issue with disableOnInvalid for buttons and added a unit test to ensure correct behavior in the future.
+ - PDF21: Focus on the first invalid field on form submission
+ - PDF20: Update object with iframe position and window scroll position and IE11 compatibility
+
+## 4.9.12
+### Changed
+ - Reverted https://github.com/formio/formio.js/pull/2049 for reasons described in the PR.
+
+## 4.9.11
+### Changed
+ - Upgrade uuid@7.0.3
+
+### Fixed
+ - Problems where errors would throw in ACE editor regarding unknown theme.
+ - Issues where EditGrid cancel would not reset the component contexts.
+ - The export of the formiojs module to allow other libraries to import from the compiled dist file.
+
+## 4.9.10
+### Changed
+ - Update idb@5.0.2, jsdom@16.2.2, eventemitter2@6.3.1, ejs-loader@0.3.6
+
+### Fixed
+ - Issues with logic messing up form builder.
+ - EditGrid problems where data would get in a detached state.
+ - Fixed unstranslated component label in Webform
+ - Fixed calculated value doesn`t work when editing data with manual override in true position
+
+## 4.9.9
+### Fixed
+ - Issue where checkboxes configured as Radio input would still add checkbox key to data.
+
+### Added
+ - An xs column size.
+ 
+### Changed
+ - Upgrade i18next@19.3.4
+
+## 4.9.8
+### Fixed
+ - Issues where the setValue of nested components would not return the correct changed status.
+ - Issues where read only forms would not apply conditions correctly.
+
+## 4.9.7
+### Fixed
+ - UIP-159: Fixing the UUID import.
+ - T826: Fix nested forms never submitting.
+
 ## 4.9.6
 ### Fixed
  - GS-PDF27: Add DOMTokenList polyfill to resolve submit issues with IE11.

@@ -197,6 +197,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fieldData">fieldData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-formatOffset">formatOffset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getArrayFromComponentPath">getArrayFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContextComponents">getContextComponents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getCurrencyAffixes">getCurrencyAffixes</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getDateSetting">getDateSetting</a></span></span></li>
@@ -207,6 +208,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getNumberSeparators">getNumberSeparators</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPropertyValue">getPropertyValue</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRandomComponentId">getRandomComponentId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getStringFromComponentPath">getStringFromComponentPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-guid">guid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isInputComponent">isInputComponent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isMongoId">isMongoId</a></span></span></li>
@@ -1581,7 +1583,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/components/select/Select.js~SelectComponent.html#instance-method-addValueOptions">addValueOptions</a></span></span><span class="code" data-ice="signature">(items: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/components/select/Select.js~SelectComponent.html#instance-method-addValueOptions">addValueOptions</a></span></span><span class="code" data-ice="signature">(items: <span>*</span>): <span>*</span></span>
         </p>
       </div>
       <div>
@@ -1639,6 +1641,34 @@
           
           
           <span class="code" data-ice="name"><span><a href="class/src/components/select/Select.js~SelectComponent.html#instance-method-attach">attach</a></span></span><span class="code" data-ice="signature">(element: <span>*</span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/components/select/Select.js~SelectComponent.html#instance-method-choicesOptions">choicesOptions</a></span></span><span class="code" data-ice="signature">(): {&quot;removeItemButton&quot;: <span>*</span>, &quot;itemSelectText&quot;: <span>*</span>, &quot;classNames&quot;: <span>*</span>, &quot;addItemText&quot;: <span>*</span>, &quot;placeholder&quot;: <span>*</span>, &quot;placeholderValue&quot;: <span>*</span>, &quot;noResultsText&quot;: <span>*</span>, &quot;noChoicesText&quot;: <span>*</span>, &quot;searchPlaceholderValue&quot;: <span>*</span>, &quot;shouldSort&quot;: <span>*</span>, &quot;position&quot;: <span>*</span>, &quot;searchEnabled&quot;: <span>*</span>, &quot;searchChoices&quot;: <span>*</span>, &quot;searchFields&quot;: <span>*</span>, &quot;fuseOptions&quot;: <span>*</span>, &quot;valueComparer&quot;: <span>*</span>, &quot;resetScrollPosition&quot;: <span>*</span>, ...customOptions: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
         </p>
       </div>
       <div>
@@ -5470,14 +5500,13 @@ to perform special async functions.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html#instance-method-calculateComponentValue">calculateComponentValue</a></span></span><span class="code" data-ice="signature">(data: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html#instance-method-calculateComponentValue">calculateComponentValue</a></span></span><span class="code" data-ice="signature">(data: <span>*</span>, flags: <span>*</span>, row: <span>*</span>): <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Perform a calculated value operation.</p>
-</div>
+        
       </div>
     </td>
     <td>
@@ -5933,6 +5962,35 @@ something changed.</p>
         
         
         <div data-ice="description"><p>Check if this component is conditionally visible.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html#instance-method-convertNumberOrBoolToString">convertNumberOrBoolToString</a></span></span><span class="code" data-ice="signature">(data: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Perform a calculated value operation.</p>
 </div>
       </div>
     </td>
@@ -8085,6 +8143,34 @@ protected.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html#instance-method-size">size</a></span></span><span class="code" data-ice="signature">(size: <span>*</span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/components/_classes/component/Component.js~Component.html#instance-method-splice">splice</a></span></span><span class="code" data-ice="signature">(index: <span>*</span>)</span>
         </p>
       </div>
@@ -8574,7 +8660,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber679">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber678">source</a></span></span>
     </span>
   </h3>
 
@@ -8617,7 +8703,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber485">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber484">source</a></span></span>
     </span>
   </h3>
 
@@ -8660,7 +8746,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber792">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber795">source</a></span></span>
     </span>
   </h3>
 
@@ -8875,7 +8961,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber928">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber931">source</a></span></span>
     </span>
   </h3>
 
@@ -8919,7 +9005,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber945">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber948">source</a></span></span>
     </span>
   </h3>
 
@@ -8963,7 +9049,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber506">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber505">source</a></span></span>
     </span>
   </h3>
 
@@ -9006,7 +9092,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber514">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber513">source</a></span></span>
     </span>
   </h3>
 
@@ -9093,7 +9179,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber729">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber774">source</a></span></span>
     </span>
   </h3>
 
@@ -9480,7 +9566,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1156">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1159">source</a></span></span>
     </span>
   </h3>
 
@@ -9523,7 +9609,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber324">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber323">source</a></span></span>
     </span>
   </h3>
 
@@ -9566,7 +9652,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber816">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber819">source</a></span></span>
     </span>
   </h3>
 
@@ -9609,7 +9695,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber440">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber439">source</a></span></span>
     </span>
   </h3>
 
@@ -9653,7 +9739,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber815">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber818">source</a></span></span>
     </span>
   </h3>
 
@@ -9825,7 +9911,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber489">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber488">source</a></span></span>
     </span>
   </h3>
 
@@ -9868,7 +9954,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber497">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber496">source</a></span></span>
     </span>
   </h3>
 
@@ -10084,7 +10170,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber949">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber952">source</a></span></span>
     </span>
   </h3>
 
@@ -10127,7 +10213,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber957">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber960">source</a></span></span>
     </span>
   </h3>
 
@@ -10173,7 +10259,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber661">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber660">source</a></span></span>
     </span>
   </h3>
 
@@ -10217,7 +10303,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber965">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber968">source</a></span></span>
     </span>
   </h3>
 
@@ -10360,7 +10446,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber650">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber649">source</a></span></span>
     </span>
   </h3>
 
@@ -10403,7 +10489,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber903">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber906">source</a></span></span>
     </span>
   </h3>
 
@@ -10458,7 +10544,7 @@ protected.</p>
     
     
     
-    <span class="code" data-ice="name">addValueOptions</span><span class="code" data-ice="signature">(items: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="code" data-ice="name">addValueOptions</span><span class="code" data-ice="signature">(items: <span>*</span>): <span>*</span></span>
     <span class="right-info">
       
       
@@ -10497,7 +10583,7 @@ protected.</p>
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+          <td class="return-type code" data-ice="returnType"><span>*</span></td>
           
         </tr>
       </tbody>
@@ -10533,7 +10619,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1243">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1246">source</a></span></span>
     </span>
   </h3>
 
@@ -10605,7 +10691,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber705">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber750">source</a></span></span>
     </span>
   </h3>
 
@@ -10665,6 +10751,61 @@ protected.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-choicesOptions">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">choicesOptions</span><span class="code" data-ice="signature">(): {&quot;removeItemButton&quot;: <span>*</span>, &quot;itemSelectText&quot;: <span>*</span>, &quot;classNames&quot;: <span>*</span>, &quot;addItemText&quot;: <span>*</span>, &quot;placeholder&quot;: <span>*</span>, &quot;placeholderValue&quot;: <span>*</span>, &quot;noResultsText&quot;: <span>*</span>, &quot;noChoicesText&quot;: <span>*</span>, &quot;searchPlaceholderValue&quot;: <span>*</span>, &quot;shouldSort&quot;: <span>*</span>, &quot;position&quot;: <span>*</span>, &quot;searchEnabled&quot;: <span>*</span>, &quot;searchChoices&quot;: <span>*</span>, &quot;searchFields&quot;: <span>*</span>, &quot;fuseOptions&quot;: <span>*</span>, &quot;valueComparer&quot;: <span>*</span>, &quot;resetScrollPosition&quot;: <span>*</span>, ...customOptions: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber703">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType">{&quot;removeItemButton&quot;: <span>*</span>, &quot;itemSelectText&quot;: <span>*</span>, &quot;classNames&quot;: <span>*</span>, &quot;addItemText&quot;: <span>*</span>, &quot;placeholder&quot;: <span>*</span>, &quot;placeholderValue&quot;: <span>*</span>, &quot;noResultsText&quot;: <span>*</span>, &quot;noChoicesText&quot;: <span>*</span>, &quot;searchPlaceholderValue&quot;: <span>*</span>, &quot;shouldSort&quot;: <span>*</span>, &quot;position&quot;: <span>*</span>, &quot;searchEnabled&quot;: <span>*</span>, &quot;searchChoices&quot;: <span>*</span>, &quot;searchFields&quot;: <span>*</span>, &quot;fuseOptions&quot;: <span>*</span>, &quot;valueComparer&quot;: <span>*</span>, &quot;resetScrollPosition&quot;: <span>*</span>, ...customOptions: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-deleteValue">
     <span class="access" data-ice="access">public</span>
     
@@ -10676,7 +10817,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1225">source</a></span></span>
     </span>
   </h3>
 
@@ -10720,7 +10861,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1282">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1285">source</a></span></span>
     </span>
   </h3>
 
@@ -10764,7 +10905,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber221">source</a></span></span>
     </span>
   </h3>
 
@@ -10807,7 +10948,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1290">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1293">source</a></span></span>
     </span>
   </h3>
 
@@ -10850,7 +10991,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber461">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber460">source</a></span></span>
     </span>
   </h3>
 
@@ -10905,7 +11046,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1025">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1028">source</a></span></span>
     </span>
   </h3>
 
@@ -10961,7 +11102,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1019">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1022">source</a></span></span>
     </span>
   </h3>
 
@@ -11075,7 +11216,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1168">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1171">source</a></span></span>
     </span>
   </h3>
 
@@ -11217,7 +11358,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber345">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber344">source</a></span></span>
     </span>
   </h3>
 
@@ -11318,7 +11459,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1078">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1081">source</a></span></span>
     </span>
   </h3>
 
@@ -11389,7 +11530,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1118">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1121">source</a></span></span>
     </span>
   </h3>
 
@@ -11461,7 +11602,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1072">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1075">source</a></span></span>
     </span>
   </h3>
 
@@ -11516,7 +11657,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber471">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber470">source</a></span></span>
     </span>
   </h3>
 
@@ -11560,7 +11701,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber683">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber682">source</a></span></span>
     </span>
   </h3>
 
@@ -11615,7 +11756,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1177">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1180">source</a></span></span>
     </span>
   </h3>
 
@@ -11680,7 +11821,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1296">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1299">source</a></span></span>
     </span>
   </h3>
 
@@ -11751,7 +11892,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber232">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber231">source</a></span></span>
     </span>
   </h3>
 
@@ -11816,7 +11957,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1126">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1129">source</a></span></span>
     </span>
   </h3>
 
@@ -11895,7 +12036,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber919">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber922">source</a></span></span>
     </span>
   </h3>
 
@@ -11938,7 +12079,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber467">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber466">source</a></span></span>
     </span>
   </h3>
 
@@ -11981,7 +12122,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber524">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber523">source</a></span></span>
     </span>
   </h3>
 
@@ -12046,7 +12187,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1234">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber1237">source</a></span></span>
     </span>
   </h3>
 
@@ -12102,7 +12243,7 @@ protected.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber694">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/components/select/Select.js.html#lineNumber693">source</a></span></span>
     </span>
   </h3>
 
