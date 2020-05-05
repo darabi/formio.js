@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.9.25
+### Fixed
+ - PDF 34 - Fixed an issue of not formatted date in pdf header
+
+### Changed
+ - Temporarily pin moment@2.24.0 to resolve import issue.
+
+## 4.9.24
+### Fixed
+ - A few issues with the Address component.
+
+## 4.9.23
+### Fixed
+ - Fixed WYSIWYG image upload not working without form URL provided. #2709
+ - Fix silent errors. #2700
+ - Typo fixed in create error message. #2697
+ 
+### Changed
+ - Upgrade dompurify@2.0.10, gulp-sass@4.1.0, webpack@4.43.0
+
+## 4.9.22
+### Fixed
+ - PDF-58: Fixed an issue of the button error that disappear and reappear
+
+## 4.9.21
+### Fixed
+ - Fixed issue where pdf cursor would jump around as issues were resolved.
+
 ## 4.9.20
 ### Changed
  - No changes. Released 4.9.20-rc.4

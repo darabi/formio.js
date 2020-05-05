@@ -276,7 +276,7 @@ export default class PDF extends Webform {
   showErrors(error, triggerEvent) {
     const helpBlock = document.getElementById('submit-error');
 
-    if (!helpBlock) {
+    if (!helpBlock && this.errors.length) {
       const p = this.ce('p', { class: 'help-block' });
 
       this.setContent(p, this.t('submitError'));
@@ -292,10 +292,6 @@ export default class PDF extends Webform {
 
     if (!this.errors.length && helpBlock) {
       helpBlock.remove();
-    }
-
-    if (this.errors.length) {
-      this.focusOnComponent(this.errors[0].component.key);
     }
 
     super.showErrors(error, triggerEvent);
