@@ -432,23 +432,14 @@ export default class Wizard extends Webform {
   }
 
   cancel(noconfirm) {
-    const redraw = (0 === this.page);
     if (super.cancel(noconfirm)) {
       this.setPristine(true);
       return this.setPage(0).then(() => {
-        if (redraw) {
           this.redraw();
-        }
+          return this.page;
       });
     }
-    else {
-      this.setPristine(true);
-      return this.setPage(0).then(() => {
-        if (redraw) {
-          this.redraw();
-        }
-      });
-    }
+    return NativePromise.resolve();
   }
 
   getPageIndexByKey(key) {
@@ -501,9 +492,9 @@ export default class Wizard extends Webform {
   }
 
   setValue(submission, flags = {}) {
-    super.setValue(submission, flags);
+    const changed = super.setValue(submission, flags);
     this.pageFieldLogic(this.page);
-    return flags.changed;
+    return changed;
   }
 
   isClickable(page, index) {
